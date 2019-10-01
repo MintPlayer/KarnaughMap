@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using QuineMcCluskey.Data.QuineMcCluskey.Table1;
+using QuineMcCluskey.Enums;
 //using QuineMcCluskey.Data;
 
 namespace QuineMcCluskey
@@ -25,31 +26,15 @@ namespace QuineMcCluskey
                         for (int l = 0; l < table.Columns[i].Groups[j + 1].Records.Count; l++)
                         {
                             var term2 = table.Columns[i].Groups[j + 1].Records[l];
-                            var res = CompareItems(term1, term2);
+                            var res = Record.CompareItems(term1, term2);
                             if (res == null) continue;
-                            if (table.Columns[i + 1].Groups[j].Records.Any(r => r.Text == res)) continue;
+                            if (table.Columns[i + 1].Groups[j].Records.Any(r => res.Data.SequenceEqual(r.Data))) continue;
 
-                            table.Columns[i + 1].Groups[j].Records.Add(new Record(res));
+                            table.Columns[i + 1].Groups[j].Records.Add(res);
                         }
                     }
                 }
             }
-        }
-
-        private static string CompareItems(Record item1, Record item2)
-        {
-            var res = "";
-            var differences = 0;
-            for (int m = 0; m < item1.Text.Length; m++)
-            {
-                if ((item1.Text[m] == 'X') ^ (item2.Text[m] == 'X')) return null;
-
-                if (item1.Text[m] == item2.Text[m]) res += item1.Text[m];
-                else if (++differences > 1) return null;
-                else res += 'X';
-            }
-
-            return res;
         }
 
         private static Table CreateTable(IEnumerable<int> minterms)
@@ -57,8 +42,21 @@ namespace QuineMcCluskey
             var table = new Table();
             var bin_minterms = minterms.Select(m => Convert.ToString(m, 2));
             var bits = bin_minterms.Max(m => m.Length);
-            var bin_minterms_padded = bin_minterms.Select(m => m.PadLeft(bits, '0'));
-
+            var bin_minterms_padded = bin_minterms
+                .Select(m => m.PadLeft(bits, '0'))
+                .Select(m => m.Select(b =>
+                {
+                    switch (b)
+                    {
+                        case '0':
+                            return Enums.LogicState.False;
+                        case '1':
+                            return Enums.LogicState.True;
+                        default:
+                            return Enums.LogicState.DontCare;
+                    }
+                }));
+            
             for (int i = 0; i <= bits; i++)
             {
                 var column = new Column();
@@ -68,8 +66,8 @@ namespace QuineMcCluskey
                 table.Columns.Add(column);
             }
 
-            foreach (var number in bin_minterms_padded)
-                table.Columns[0].Groups[number.Count(n => n == '1')].Records.Add(new Record(number));
+            foreach (var minterm in bin_minterms_padded)
+                table.Columns[0].Groups[minterm.Count(n => n == Enums.LogicState.True)].Records.Add(new Record(minterm.ToArray()));
 
             return table;
         }
