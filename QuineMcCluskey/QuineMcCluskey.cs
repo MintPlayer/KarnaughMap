@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using QuineMcCluskey.Data.QuineMcCluskey.Table1;
 //using QuineMcCluskey.Data;
 
 namespace QuineMcCluskey
@@ -24,11 +25,11 @@ namespace QuineMcCluskey
                         for (int l = 0; l < table[i][j + 1].Count; l++)
                         {
                             var term2 = table[i][j + 1][l];
-                            var res = CompareItems(term1, term2);
+                            var res = CompareItems(term1.Text, term2.Text);
                             if (res == null) continue;
-                            if (table[i + 1][j].Contains(res)) continue;
+                            if (table[i + 1][j].Any(r => r.Text == res)) continue;
 
-                            table[i + 1][j].Add(res);
+                            table[i + 1][j].Add(new Record(res));
                         }
                     }
                 }
@@ -51,24 +52,24 @@ namespace QuineMcCluskey
             return res;
         }
 
-        private static List<List<List<string>>> CreateTable(IEnumerable<int> minterms)
+        private static List<List<List<Record>>> CreateTable(IEnumerable<int> minterms)
         {
-            var table = new List<List<List<string>>>();
+            var table = new List<List<List<Record>>>();
             var bin_minterms = minterms.Select(m => Convert.ToString(m, 2));
             var bits = bin_minterms.Max(m => m.Length);
             var bin_minterms_padded = bin_minterms.Select(m => m.PadLeft(bits, '0'));
 
             for (int i = 0; i <= bits; i++)
             {
-                var column = new List<List<string>>();
+                var column = new List<List<Record>>();
                 for (int j = 0; j < bits - i + 1; j++)
-                    column.Add(new List<string>());
+                    column.Add(new List<Record>());
 
                 table.Add(column);
             }
 
             foreach (var number in bin_minterms_padded)
-                table[0][number.Count(n => n == '1')].Add(number);
+                table[0][number.Count(n => n == '1')].Add(new Record(number));
 
             return table;
         }
