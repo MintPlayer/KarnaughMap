@@ -2,7 +2,13 @@
 
 namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
 {
-    internal class Group : List<Record>
+    internal class Group
     {
+        public Group()
+        {
+            Records = new List<Record>();
+        }
+
+        public List<Record> Records { get; set; }
     }
 }

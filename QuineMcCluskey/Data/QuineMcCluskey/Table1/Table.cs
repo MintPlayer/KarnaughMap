@@ -4,7 +4,13 @@ using System.Text;
 
 namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
 {
-    internal class Table : List<Column>
+    internal class Table
     {
+        public Table()
+        {
+            Columns = new List<Column>();
+        }
+
+        public List<Column> Columns { get; set; }
     }
 }

@@ -15,21 +15,21 @@ namespace QuineMcCluskey
 
             var table = CreateTable(minterms);
 
-            for (int i = 0; i < table.Count - 1; i++)
+            for (int i = 0; i < table.Columns.Count - 1; i++)
             {
-                for (int j = 0; j < table[i].Count - 1; j++)
+                for (int j = 0; j < table.Columns[i].Groups.Count - 1; j++)
                 {
-                    for (int k = 0; k < table[i][j].Count; k++)
+                    for (int k = 0; k < table.Columns[i].Groups[j].Records.Count; k++)
                     {
-                        var term1 = table[i][j][k];
-                        for (int l = 0; l < table[i][j + 1].Count; l++)
+                        var term1 = table.Columns[i].Groups[j].Records[k];
+                        for (int l = 0; l < table.Columns[i].Groups[j + 1].Records.Count; l++)
                         {
-                            var term2 = table[i][j + 1][l];
+                            var term2 = table.Columns[i].Groups[j + 1].Records[l];
                             var res = CompareItems(term1, term2);
                             if (res == null) continue;
-                            if (table[i + 1][j].Any(r => r.Text == res)) continue;
+                            if (table.Columns[i + 1].Groups[j].Records.Any(r => r.Text == res)) continue;
 
-                            table[i + 1][j].Add(new Record(res));
+                            table.Columns[i + 1].Groups[j].Records.Add(new Record(res));
                         }
                     }
                 }
@@ -63,13 +63,13 @@ namespace QuineMcCluskey
             {
                 var column = new Column();
                 for (int j = 0; j < bits - i + 1; j++)
-                    column.Add(new Group());
+                    column.Groups.Add(new Group());
 
-                table.Add(column);
+                table.Columns.Add(column);
             }
 
             foreach (var number in bin_minterms_padded)
-                table[0][number.Count(n => n == '1')].Add(new Record(number));
+                table.Columns[0].Groups[number.Count(n => n == '1')].Records.Add(new Record(number));
 
             return table;
         }
