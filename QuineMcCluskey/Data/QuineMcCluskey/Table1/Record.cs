@@ -6,17 +6,19 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
 {
     public class Record
     {
-        public Record(LogicState[] data)
+        public Record(int[] minTerms, LogicState[] data)
         {
+            MinTerms = minTerms;
             Data = data;
         }
 
         public LogicState[] Data { get; set; }
         public bool Used { get; set; }
+        public int[] MinTerms { get; private set; }
 
         public override string ToString()
         {
-            return new string(Data.Reverse().Select(d =>
+            return new string(Data.Select(d =>
             {
                 switch (d)
                 {
@@ -40,7 +42,7 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
                 else result.Add(LogicState.DontCare);
             }
 
-            return new Record(result.ToArray());
+            return new Record(item1.MinTerms.Union(item2.MinTerms).ToArray(), result.ToArray());
         }
     }
 }
