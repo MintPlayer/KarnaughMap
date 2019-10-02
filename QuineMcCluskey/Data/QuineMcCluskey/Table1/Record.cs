@@ -12,6 +12,7 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
         }
 
         public LogicState[] Data { get; set; }
+        public bool Used { get; set; }
 
         public override string ToString()
         {

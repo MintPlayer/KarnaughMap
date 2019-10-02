@@ -14,7 +14,7 @@ namespace QuineMcCluskey
         {
             //var table = QMC_CreateTable(minterms, dontcares);
 
-            var table = CreateTable(minterms);
+            var table = CreateTable1(minterms);
 
             for (int i = 0; i < table.Columns.Count - 1; i++)
             {
@@ -28,6 +28,10 @@ namespace QuineMcCluskey
                             var term2 = table.Columns[i].Groups[j + 1].Records[l];
                             var res = Record.CompareItems(term1, term2);
                             if (res == null) continue;
+
+                            // Mark records as used
+                            term1.Used = term2.Used = true;
+
                             if (table.Columns[i + 1].Groups[j].Records.Any(r => res.Data.SequenceEqual(r.Data))) continue;
 
                             table.Columns[i + 1].Groups[j].Records.Add(res);
@@ -35,9 +39,11 @@ namespace QuineMcCluskey
                     }
                 }
             }
+
+
         }
 
-        private static Table CreateTable(IEnumerable<int> minterms)
+        private static Table CreateTable1(IEnumerable<int> minterms)
         {
             var table = new Table();
             var bin_minterms = minterms.Select(m => Convert.ToString(m, 2));
