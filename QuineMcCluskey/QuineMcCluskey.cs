@@ -115,25 +115,129 @@ namespace QuineMcCluskey
                 Columns = minterms.Select(m => new Data.QuineMcCluskey.Table2.Column { Minterm = m, Status = Data.QuineMcCluskey.Table2.eColumnStatus.NotUsed }).ToList()
             };
 
-
-            // Loop through all columns
-            for (int i = 0; i < table.Columns.Count; i++)
+            var done = false;
+            while (!done)
             {
-                // Check if column only has one row
-                var associated_rows = table.FindRowsForColumn(table.Columns[i]);
-                if(associated_rows.Count() == 1)
+                #region Find required rows. Loop through all columns
+                for (int i = 0; i < table.Columns.Count; i++)
                 {
-                    var associated_rows_list = associated_rows.ToList();
-                 
-                    // Mark row as required
-                    associated_rows_list[0].Status = Data.QuineMcCluskey.Table2.eRowStatus.Required;
+                    #region If column already used -> continue
+                    if (table.Columns[i].Status == Data.QuineMcCluskey.Table2.eColumnStatus.Used) continue;
+                    #endregion
 
-                    // Mark columns for this row as used.
-                    foreach (var minterm in associated_rows_list[0].Loop.MinTerms)
-                        table.Columns.First(c => c.Minterm == minterm).Status = Data.QuineMcCluskey.Table2.eColumnStatus.Used;
+                    #region Check if column only has one row
+                    var associated_rows = table.FindRowsForColumn(table.Columns[i]);
+                    if (associated_rows.Count() == 1)
+                    {
+                        var required_row = associated_rows.First();
+
+                        // Mark row as required
+                        required_row.Status = Data.QuineMcCluskey.Table2.eRowStatus.Required;
+
+                        // Mark columns for this row as used.
+                        foreach (var minterm in required_row.Loop.MinTerms)
+                            table.Columns.First(c => c.Minterm == minterm).Status = Data.QuineMcCluskey.Table2.eColumnStatus.Used;
+                    }
+                    #endregion
                 }
-            }
+                #endregion
 
+                #region If there are no more unused columns -> Break
+                if (!table.Columns.Any(c => c.Status == Data.QuineMcCluskey.Table2.eColumnStatus.NotUsed))
+                {
+                    done = true;
+                    continue;
+                }
+                #endregion
+
+                #region Try to ignore rows
+                var ignored_rows = 0;
+
+                // Combine all rows
+                for (int i = 0; i < table.Rows.Count - 1; i++)
+                {
+                    switch (table.Rows[i].Status)
+                    {
+                        case Data.QuineMcCluskey.Table2.eRowStatus.Required:
+                        case Data.QuineMcCluskey.Table2.eRowStatus.Ignore:
+                        case Data.QuineMcCluskey.Table2.eRowStatus.TemporarilyIgnore:
+                            continue;
+                    }
+
+                    var rowIminterms = table.Rows[i].Loop.MinTerms
+                        .Except(table.Columns.Where(c => c.Status == Data.QuineMcCluskey.Table2.eColumnStatus.Used).Select(c => c.Minterm))
+                        .ToList();
+                    for (int j = i + 1; j < table.Rows.Count; j++)
+                    {
+                        switch (table.Rows[j].Status)
+                        {
+                            case Data.QuineMcCluskey.Table2.eRowStatus.Required:
+                            case Data.QuineMcCluskey.Table2.eRowStatus.Ignore:
+                            case Data.QuineMcCluskey.Table2.eRowStatus.TemporarilyIgnore:
+                                continue;
+                        }
+
+                        var rowJminterms = table.Rows[j].Loop.MinTerms
+                            .Except(table.Columns.Where(c => c.Status == Data.QuineMcCluskey.Table2.eColumnStatus.Used).Select(c => c.Minterm))
+                            .ToList();
+                        var intersect = rowIminterms.Intersect(rowJminterms).ToArray();
+
+                        var rowIinJ = intersect.Length == rowIminterms.Count;
+                        var rowJinI = intersect.Length == rowJminterms.Count;
+
+                        if (rowIinJ && rowJinI)
+                        {
+                            if(table.Rows[i].Loop.MinTerms.Length > table.Rows[j].Loop.MinTerms.Length)
+                            {
+                                table.Rows[j].Status = Data.QuineMcCluskey.Table2.eRowStatus.Ignore;
+                            }
+                            else
+                            {
+                                table.Rows[i].Status = Data.QuineMcCluskey.Table2.eRowStatus.Ignore;
+                            }
+                            ignored_rows++;
+                        }
+                        else if (rowIinJ)
+                        {
+                            table.Rows[i].Status = Data.QuineMcCluskey.Table2.eRowStatus.Ignore;
+                            ignored_rows++;
+                        }
+                        else if (rowJinI)
+                        {
+                            table.Rows[j].Status = Data.QuineMcCluskey.Table2.eRowStatus.Ignore;
+                            ignored_rows++;
+                        }
+                    }
+                }
+                #endregion
+
+                #region If we were able to permanently ignore a row -> Rerun
+                if (ignored_rows != 0) continue;
+                #endregion
+
+                #region Try to temporarily ignore a row -> Rerun
+                var neutralRow = table.Rows.FirstOrDefault(c => c.Status == Data.QuineMcCluskey.Table2.eRowStatus.Neutral);
+                if (neutralRow == null)
+                {
+                    // No neutral rows found, however there are still unused minterms
+                    var unusedColumn = table.Columns.FirstOrDefault(c => c.Status == Data.QuineMcCluskey.Table2.eColumnStatus.NotUsed);
+                    var lastRowForColumn = table.FindRowsForColumn(unusedColumn, true).LastOrDefault(c => c.Status == Data.QuineMcCluskey.Table2.eRowStatus.TemporarilyIgnore);
+                    
+                    if(lastRowForColumn == null)
+                    {
+                        // All rows have been ignored, and there are still unused minterms (not supposed to happen)
+                        throw new Exception("Unexpected");
+                    }
+
+                    lastRowForColumn.Status = Data.QuineMcCluskey.Table2.eRowStatus.Neutral;
+                }
+                else
+                {
+                    neutralRow.Status = Data.QuineMcCluskey.Table2.eRowStatus.TemporarilyIgnore;
+                }
+                #endregion
+
+            }
 
             //var data = new char[mintermCount][];
 
@@ -158,7 +262,7 @@ namespace QuineMcCluskey
             //{
             //    foreach (var c in columns_with_one_star)
             //    {
-                    
+
             //    }
             //}
         }
