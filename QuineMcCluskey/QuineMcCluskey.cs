@@ -115,8 +115,7 @@ namespace QuineMcCluskey
                 Columns = minterms.Select(m => new Data.QuineMcCluskey.Table2.Column { Minterm = m, Status = Data.QuineMcCluskey.Table2.eColumnStatus.NotUsed }).ToList()
             };
 
-            var done = false;
-            while (!done)
+            while (true)
             {
                 #region Find required rows. Loop through all columns
                 for (int i = 0; i < table.Columns.Count; i++)
@@ -144,10 +143,7 @@ namespace QuineMcCluskey
 
                 #region If there are no more unused columns -> Break
                 if (!table.Columns.Any(c => c.Status == Data.QuineMcCluskey.Table2.eColumnStatus.NotUsed))
-                {
-                    done = true;
-                    continue;
-                }
+                    break;
                 #endregion
 
                 #region Try to ignore rows
@@ -188,13 +184,9 @@ namespace QuineMcCluskey
                         if (rowIinJ && rowJinI)
                         {
                             if(table.Rows[i].Loop.MinTerms.Length > table.Rows[j].Loop.MinTerms.Length)
-                            {
                                 table.Rows[j].Status = Data.QuineMcCluskey.Table2.eRowStatus.Ignore;
-                            }
                             else
-                            {
                                 table.Rows[i].Status = Data.QuineMcCluskey.Table2.eRowStatus.Ignore;
-                            }
                             ignored_rows++;
                         }
                         else if (rowIinJ)
