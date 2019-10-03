@@ -19,7 +19,7 @@ namespace QuineMcCluskey.Test
 
             while (true)
             {
-                QuineMcCluskey.QMC_Solve(list, new[] { 9, 14 });
+                QuineMcCluskeySolver.QMC_Solve(list, new[] { 9, 14 });
 
                 Console.ReadKey();
             }

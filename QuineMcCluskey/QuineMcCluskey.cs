@@ -7,7 +7,7 @@ using QuineMcCluskey.Enums;
 
 namespace QuineMcCluskey
 {
-    public static class QuineMcCluskey
+    public static class QuineMcCluskeySolver
     {
         public static void QMC_Solve(IEnumerable<int> minterms, IEnumerable<int> dontcares)
         {
@@ -22,7 +22,7 @@ namespace QuineMcCluskey
                 .SelectMany(g => g.Records)
                 .Where(r => !r.Used).ToArray();
 
-
+            CreateTable2(minterms.ToList(), unused.ToList());
 
 
         }
@@ -105,41 +105,73 @@ namespace QuineMcCluskey
             }
         }
 
-        private static Data.QuineMcCluskey.Table2.Table CreateTable2(IEnumerable<int> minterms, IEnumerable<Data.QuineMcCluskey.Table1.Record> loops)
+        private static void CreateTable2(List<int> minterms, List<Data.QuineMcCluskey.Table1.Record> loops)
         {
-            var columns = minterms.Select(m => new Data.QuineMcCluskey.Table2.Column
+            int loopCount = loops.Count, mintermCount = minterms.Count;
+
+            //// Matrix (jagged array) containing table 2
+            //var matrix = new bool[mintermCount][];
+            //
+            //// Loop through all minterms
+            //for (var i = 0; i < mintermCount; i++)
+            //{
+            //    var minterm = minterms[i];
+            //    for (var j = 0; j < loopCount; j++)
+            //    {
+            //        var loop = loops[j];
+            //        matrix[i][j] = loop.MinTerms.Contains(minterm);
+            //    }
+            //}
+
+            var table = new Data.QuineMcCluskey.Table2.Table(minterms, loops);
+
+            for (var i = 0; i < mintermCount; i++)
             {
-                MinTerm = m,
-                NumberOfLoops = () => loops.Count(l => l.MinTerms.Contains(m)),
-                Used = false
-            }).ToList();
-
-            var covered_minterms = new List<int>();
-
-            // Find columns with only one loop
-            var columns_with_one_loop = columns.Where(c => c.NumberOfLoops() == 1);
-            if (columns_with_one_loop.Any())
-            {
-                //https://codeblog.jonskeet.uk/2006/01/20/foreachperf/
-                //columns_with_one_loop.ToList().ForEach((colmn) =>
-                //{
-
-                //})
-
-                foreach (var column in columns_with_one_loop)
+                if(table.Columns[i].Status == Data.QuineMcCluskey.Table2.eColumnStatus.Unused)
                 {
-                    foreach (var required_loop in loops.Where(l => l.MinTerms.Contains(column.MinTerm)))
-                    {
-                        required_loop.Used = true;
-                        covered_minterms.AddRange(required_loop.MinTerms.Except(covered_minterms));
-                        covered_minterms.ForEach()
-                    }
+
                 }
             }
-            else
-            {
 
-            }
+
+
+
+
+            //var columns = minterms.Select(m => new Data.QuineMcCluskey.Table2.Column
+            //{
+            //    MinTerm = m,
+            //    NumberOfLoops = () => loops.Count(l => l.MinTerms.Contains(m)),
+            //    Used = false
+            //}).ToList();
+
+            //var covered_minterms = new List<int>();
+
+            //// Find columns with only one loop
+            //var columns_with_one_loop = columns.Where(c => c.NumberOfLoops() == 1);
+            //if (columns_with_one_loop.Any())
+            //{
+            //    //https://codeblog.jonskeet.uk/2006/01/20/foreachperf/
+            //    //columns_with_one_loop.ToList().ForEach((colmn) =>
+            //    //{
+
+            //    //})
+
+            //    var matrix
+
+            //    foreach (var column in columns_with_one_loop)
+            //    {
+            //        foreach (var required_loop in loops.Where(l => l.MinTerms.Contains(column.MinTerm)))
+            //        {
+            //            required_loop.Used = true;
+            //            covered_minterms.AddRange(required_loop.MinTerms.Except(covered_minterms));
+            //            covered_minterms.ForEach()
+            //        }
+            //    }
+            //}
+            //else
+            //{
+
+            //}
         }
     }
 }
