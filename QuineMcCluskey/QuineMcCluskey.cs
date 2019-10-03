@@ -4,32 +4,36 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using QuineMcCluskey.Enums;
 //using QuineMcCluskey.Data;
+using Table1 = QuineMcCluskey.Data.QuineMcCluskey.Table1.Table;
+using Table2 = QuineMcCluskey.Data.QuineMcCluskey.Table2.Table;
 
 namespace QuineMcCluskey
 {
     public static class QuineMcCluskeySolver
     {
-        public static void QMC_Solve(IEnumerable<int> minterms, IEnumerable<int> dontcares)
+        public static IEnumerable<Data.QuineMcCluskey.Table1.Loop> QMC_Solve(IEnumerable<int> minterms, IEnumerable<int> dontcares)
         {
             //var table = QMC_CreateTable(minterms, dontcares);
 
             // For table 1, include the don't cares
             var table1 = CreateTable1(minterms.Union(dontcares));
-            QMC_SolveTable1(table1);
+            SolveTable1(table1);
 
             var unused = table1.Columns
                 .SelectMany(c => c.Groups)
                 .SelectMany(g => g.Records)
                 .Where(r => !r.Used);
 
-            CreateTable2(minterms.ToList(), unused.ToList());
+            var table2 = CreateTable2(minterms.ToList(), unused.ToList());
 
+            SolveTable2(table2);
 
+            return table2.Rows.Where(r => r.Status == Data.QuineMcCluskey.Table2.eRowStatus.Required).Select(r => r.Loop);
         }
 
-        private static Data.QuineMcCluskey.Table1.Table CreateTable1(IEnumerable<int> minterms)
+        private static Table1 CreateTable1(IEnumerable<int> minterms)
         {
-            var table = new Data.QuineMcCluskey.Table1.Table();
+            var table = new Table1();
 
             // Convert to binary
             var bin_minterms = minterms.Select(m => new
@@ -78,7 +82,7 @@ namespace QuineMcCluskey
             return table;
         }
 
-        private static void QMC_SolveTable1(Data.QuineMcCluskey.Table1.Table table1)
+        private static void SolveTable1(Table1 table1)
         {
             for (int i = 0; i < table1.Columns.Count - 1; i++)
             {
@@ -105,16 +109,19 @@ namespace QuineMcCluskey
             }
         }
 
-        private static void CreateTable2(List<int> minterms, List<Data.QuineMcCluskey.Table1.Loop> loops)
+        private static Table2 CreateTable2(List<int> minterms, List<Data.QuineMcCluskey.Table1.Loop> loops)
         {
             int loopCount = loops.Count, mintermCount = minterms.Count;
 
-            var table = new Data.QuineMcCluskey.Table2.Table
+            return new Table2
             {
                 Rows = loops.Select(l => new Data.QuineMcCluskey.Table2.Row { Loop = l, Status = Data.QuineMcCluskey.Table2.eRowStatus.Neutral }).ToList(),
                 Columns = minterms.Select(m => new Data.QuineMcCluskey.Table2.Column { Minterm = m, Status = Data.QuineMcCluskey.Table2.eColumnStatus.NotUsed }).ToList()
             };
+        }
 
+        private static void SolveTable2(Table2 table)
+        {
             while (true)
             {
                 #region Find required rows. Loop through all columns
@@ -183,7 +190,7 @@ namespace QuineMcCluskey
 
                         if (rowIinJ && rowJinI)
                         {
-                            if(table.Rows[i].Loop.MinTerms.Length > table.Rows[j].Loop.MinTerms.Length)
+                            if (table.Rows[i].Loop.MinTerms.Length > table.Rows[j].Loop.MinTerms.Length)
                                 table.Rows[j].Status = Data.QuineMcCluskey.Table2.eRowStatus.Ignore;
                             else
                                 table.Rows[i].Status = Data.QuineMcCluskey.Table2.eRowStatus.Ignore;
@@ -214,8 +221,8 @@ namespace QuineMcCluskey
                     // No neutral rows found, however there are still unused minterms
                     var unusedColumn = table.Columns.FirstOrDefault(c => c.Status == Data.QuineMcCluskey.Table2.eColumnStatus.NotUsed);
                     var lastRowForColumn = table.FindRowsForColumn(unusedColumn, true).LastOrDefault(c => c.Status == Data.QuineMcCluskey.Table2.eRowStatus.TemporarilyIgnore);
-                    
-                    if(lastRowForColumn == null)
+
+                    if (lastRowForColumn == null)
                     {
                         // All rows have been ignored, and there are still unused minterms (not supposed to happen)
                         throw new Exception("Unexpected");
@@ -230,33 +237,6 @@ namespace QuineMcCluskey
                 #endregion
 
             }
-
-            //var data = new char[mintermCount][];
-
-            //for (int i = 0; i < mintermCount; i++)
-            //{
-            //    //for (int j = 0; j < loopCount; j++)
-            //    //{
-            //    //    if (loops[j].MinTerms.Contains(minterms[i]))
-            //    //        data[i][j] = '*';
-            //    //}
-            //    data[i] = loops.Select(l => l.MinTerms.Contains(minterms[i]) ? '*' : char.MinValue).ToArray();
-            //}
-
-            //for (int i = 0; i < mintermCount; i++)
-            //{
-            //    if(data[i].Count(r => r == '*') == 1)
-            //        data
-            //}
-
-            //var columns_with_one_star = data.Where(c => c.Count(r => r == '*') == 1);
-            //if(columns_with_one_star.Any())
-            //{
-            //    foreach (var c in columns_with_one_star)
-            //    {
-
-            //    }
-            //}
         }
     }
 }
