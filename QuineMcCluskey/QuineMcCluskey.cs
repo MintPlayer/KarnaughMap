@@ -20,7 +20,7 @@ namespace QuineMcCluskey
             var unused = table1.Columns
                 .SelectMany(c => c.Groups)
                 .SelectMany(g => g.Records)
-                .Where(r => !r.Used).ToArray();
+                .Where(r => !r.Used);
 
             CreateTable2(minterms.ToList(), unused.ToList());
 
@@ -73,7 +73,7 @@ namespace QuineMcCluskey
                 table
                     .Columns[0]
                     .Groups[minterm.Binary.Count(n => n == LogicState.True)]
-                    .Records.Add(new Data.QuineMcCluskey.Table1.Record(new[] { minterm.Decimal }, minterm.Binary.ToArray()));
+                    .Records.Add(new Data.QuineMcCluskey.Table1.Loop(new[] { minterm.Decimal }, minterm.Binary.ToArray()));
 
             return table;
         }
@@ -90,7 +90,7 @@ namespace QuineMcCluskey
                         for (int l = 0; l < table1.Columns[i].Groups[j + 1].Records.Count; l++)
                         {
                             var term2 = table1.Columns[i].Groups[j + 1].Records[l];
-                            var res = Data.QuineMcCluskey.Table1.Record.CompareItems(term1, term2);
+                            var res = Data.QuineMcCluskey.Table1.Loop.CompareItems(term1, term2);
                             if (res == null) continue;
 
                             // Mark records as used
@@ -105,72 +105,61 @@ namespace QuineMcCluskey
             }
         }
 
-        private static void CreateTable2(List<int> minterms, List<Data.QuineMcCluskey.Table1.Record> loops)
+        private static void CreateTable2(List<int> minterms, List<Data.QuineMcCluskey.Table1.Loop> loops)
         {
             int loopCount = loops.Count, mintermCount = minterms.Count;
 
-            //// Matrix (jagged array) containing table 2
-            //var matrix = new bool[mintermCount][];
-            //
-            //// Loop through all minterms
-            //for (var i = 0; i < mintermCount; i++)
-            //{
-            //    var minterm = minterms[i];
-            //    for (var j = 0; j < loopCount; j++)
-            //    {
-            //        var loop = loops[j];
-            //        matrix[i][j] = loop.MinTerms.Contains(minterm);
-            //    }
-            //}
-
-            var table = new Data.QuineMcCluskey.Table2.Table(minterms, loops);
-
-            for (var i = 0; i < mintermCount; i++)
+            var table = new Data.QuineMcCluskey.Table2.Table
             {
-                if(table.Columns[i].Status == Data.QuineMcCluskey.Table2.eColumnStatus.Unused)
-                {
+                Rows = loops.Select(l => new Data.QuineMcCluskey.Table2.Row { Loop = l, Status = Data.QuineMcCluskey.Table2.eRowStatus.Neutral }).ToList(),
+                Columns = minterms.Select(m => new Data.QuineMcCluskey.Table2.Column { Minterm = m, Status = Data.QuineMcCluskey.Table2.eColumnStatus.NotUsed }).ToList()
+            };
 
+
+            // Loop through all columns
+            for (int i = 0; i < table.Columns.Count; i++)
+            {
+                // Check if column only has one row
+                var associated_rows = table.FindRowsForColumn(table.Columns[i]);
+                if(associated_rows.Count() == 1)
+                {
+                    var associated_rows_list = associated_rows.ToList();
+                 
+                    // Mark row as required
+                    associated_rows_list[0].Status = Data.QuineMcCluskey.Table2.eRowStatus.Required;
+
+                    // Mark columns for this row as used.
+                    foreach (var minterm in associated_rows_list[0].Loop.MinTerms)
+                        table.Columns.First(c => c.Minterm == minterm).Status = Data.QuineMcCluskey.Table2.eColumnStatus.Used;
                 }
             }
 
 
+            //var data = new char[mintermCount][];
 
-
-
-            //var columns = minterms.Select(m => new Data.QuineMcCluskey.Table2.Column
+            //for (int i = 0; i < mintermCount; i++)
             //{
-            //    MinTerm = m,
-            //    NumberOfLoops = () => loops.Count(l => l.MinTerms.Contains(m)),
-            //    Used = false
-            //}).ToList();
-
-            //var covered_minterms = new List<int>();
-
-            //// Find columns with only one loop
-            //var columns_with_one_loop = columns.Where(c => c.NumberOfLoops() == 1);
-            //if (columns_with_one_loop.Any())
-            //{
-            //    //https://codeblog.jonskeet.uk/2006/01/20/foreachperf/
-            //    //columns_with_one_loop.ToList().ForEach((colmn) =>
+            //    //for (int j = 0; j < loopCount; j++)
             //    //{
-
-            //    //})
-
-            //    var matrix
-
-            //    foreach (var column in columns_with_one_loop)
-            //    {
-            //        foreach (var required_loop in loops.Where(l => l.MinTerms.Contains(column.MinTerm)))
-            //        {
-            //            required_loop.Used = true;
-            //            covered_minterms.AddRange(required_loop.MinTerms.Except(covered_minterms));
-            //            covered_minterms.ForEach()
-            //        }
-            //    }
+            //    //    if (loops[j].MinTerms.Contains(minterms[i]))
+            //    //        data[i][j] = '*';
+            //    //}
+            //    data[i] = loops.Select(l => l.MinTerms.Contains(minterms[i]) ? '*' : char.MinValue).ToArray();
             //}
-            //else
-            //{
 
+            //for (int i = 0; i < mintermCount; i++)
+            //{
+            //    if(data[i].Count(r => r == '*') == 1)
+            //        data
+            //}
+
+            //var columns_with_one_star = data.Where(c => c.Count(r => r == '*') == 1);
+            //if(columns_with_one_star.Any())
+            //{
+            //    foreach (var c in columns_with_one_star)
+            //    {
+                    
+            //    }
             //}
         }
     }

@@ -6,9 +6,9 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
     {
         public Group()
         {
-            Records = new List<Record>();
+            Records = new List<Loop>();
         }
 
-        public List<Record> Records { get; set; }
+        public List<Loop> Records { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using QuineMcCluskey.Data.QuineMcCluskey.Table1;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,23 +7,14 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table2
 {
     internal class Table
     {
-        public Table(List<int> minterms, List<Record> loops)
+        public List<Row> Rows { get; set; }
+        public List<Column> Columns { get; set; }
+
+        public IEnumerable<Row> FindRowsForColumn(Column column, bool include_ignored = false)
         {
-            Rows = loops.Select(l => new Row
-            {
-                Record = l,
-                Status = eRowStatus.Neutral
-            }).ToList();
-
-            Columns = minterms.Select(m => new Column 
-            {
-                MinTerm = m,
-                Status = eColumnStatus.Unused,
-                Rows = Rows.Where(r => r.Record.MinTerms.Contains(m)).ToList()
-            }).ToList();
+            return Rows
+                .Where(r => include_ignored | new[] { eRowStatus.Neutral, eRowStatus.Required }.Contains(r.Status))
+                .Where(r => r.Loop.MinTerms.Contains(column.Minterm));
         }
-
-        public List<Row> Rows { get; private set; }
-        public List<Column> Columns { get; private set; }
     }
 }

@@ -11,9 +11,9 @@ namespace QuineMcCluskey.Test
         {
             var random = new Random();
             var list = new List<int>();
-            for (int i = 0; i < 1024; i++)
+            for (int i = 0; i < 64; i++)
             {
-                var num = random.Next(1024);
+                var num = random.Next(64);
                 if (!list.Contains(num)) list.Add(num);
             }
 

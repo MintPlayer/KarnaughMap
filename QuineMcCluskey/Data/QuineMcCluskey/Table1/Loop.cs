@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
 {
-    public class Record
+    public class Loop
     {
-        public Record(int[] minTerms, LogicState[] data)
+        public Loop(int[] minTerms, LogicState[] data)
         {
             MinTerms = minTerms;
             Data = data;
@@ -29,7 +29,7 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
             }).ToArray());
         }
 
-        internal static Record CompareItems(Record item1, Record item2)
+        internal static Loop CompareItems(Loop item1, Loop item2)
         {
             var result = new List<LogicState>();
             var differences = 0;
@@ -42,7 +42,7 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
                 else result.Add(LogicState.DontCare);
             }
 
-            return new Record(item1.MinTerms.Union(item2.MinTerms).ToArray(), result.ToArray());
+            return new Loop(item1.MinTerms.Union(item2.MinTerms).ToArray(), result.ToArray());
         }
     }
 }
