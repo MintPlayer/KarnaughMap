@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Windows.Forms;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.ComponentModel.Design.Serialization;
 
 namespace WindowsFormsApp1
 {
+    [DesignerSerializer(typeof(KarnaughMapSerializer), typeof(CodeDomSerializer))]
     public partial class KarnaughMap : UserControl
     {
         public KarnaughMap()
@@ -19,6 +15,9 @@ namespace WindowsFormsApp1
             Width = Height = 50;
             Paint += KarnaughMap_Paint;
         }
+
+        public ObservableCollection<string> InputVariables { get; private set; } = new ObservableCollection<string>();
+        public string OutputVariable { get; set; }
 
         private void KarnaughMap_Paint(object sender, PaintEventArgs e)
         {
