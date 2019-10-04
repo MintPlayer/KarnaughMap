@@ -23,6 +23,8 @@ namespace WindowsFormsApp1
 
         public ObservableCollection<string> InputVariables { get; private set; }
         public string OutputVariable { get; set; }
+        public ObservableCollection<int> PlusTerms { get; set; }
+        public ObservableCollection<int> MinTerms { get; set; }
 
         private void InputVariables_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -44,10 +46,12 @@ namespace WindowsFormsApp1
             e.Graphics.Clear(BackColor);
 
             for (int i = 0; i <= columnCount; i++)
-                e.Graphics.DrawLine(System.Drawing.Pens.Black, gridSize * i, 0, gridSize * i, gridSize * rowCount);
+                e.Graphics.DrawLine(System.Drawing.Pens.Black, gridSize * (i + 1), 0, gridSize * (i + 1), gridSize * rowCount);
 
             for (int j = 0; j <= rowCount; j++)
-                e.Graphics.DrawLine(System.Drawing.Pens.Black, 0, gridSize * j, gridSize * columnCount, gridSize * j);
+                e.Graphics.DrawLine(System.Drawing.Pens.Black, 0, gridSize * (j + 1), gridSize * columnCount, gridSize * (j + 1));
+
+            e.Graphics.DrawLine(System.Drawing.Pens.Black, 0, 0, gridSize, gridSize);
         }
     }
 }
