@@ -37,7 +37,7 @@
             // 
             this.karnaughMap1.Location = new System.Drawing.Point(156, 51);
             this.karnaughMap1.Name = "karnaughMap1";
-            this.karnaughMap1.OutputVariable = null;
+            this.karnaughMap1.OutputVariable = "X";
             this.karnaughMap1.Size = new System.Drawing.Size(50, 50);
             this.karnaughMap1.TabIndex = 0;
             this.karnaughMap1.InputVariables.Add("A");
@@ -49,6 +49,7 @@
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.karnaughMap1);
             this.Name = "Form1";
