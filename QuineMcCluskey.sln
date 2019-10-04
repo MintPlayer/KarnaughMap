@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuineMcCluskey", "QuineMcCluskey\QuineMcCluskey.csproj", "{6C683CD6-B106-403B-85F0-312FD939BEDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuineMcCluskey", "QuineMcCluskey\QuineMcCluskey.csproj", "{6C683CD6-B106-403B-85F0-312FD939BEDF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuineMcCluskey.Test", "QuineMcKluskey.Test\QuineMcCluskey.Test.csproj", "{6627712F-35F9-46AB-B4E0-BBD9047875CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuineMcCluskey.Test", "QuineMcKluskey.Test\QuineMcCluskey.Test.csproj", "{6627712F-35F9-46AB-B4E0-BBD9047875CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KarnaughMap.Test", "KarnaughMap.Test\KarnaughMap.Test.csproj", "{BD86D358-3346-4C7D-8CF6-87E060B71D34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarnaughMap", "KarnaughMap\KarnaughMap.csproj", "{5219FED0-CA20-4786-BAFC-52B66FFA87A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{6627712F-35F9-46AB-B4E0-BBD9047875CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6627712F-35F9-46AB-B4E0-BBD9047875CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6627712F-35F9-46AB-B4E0-BBD9047875CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD86D358-3346-4C7D-8CF6-87E060B71D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD86D358-3346-4C7D-8CF6-87E060B71D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD86D358-3346-4C7D-8CF6-87E060B71D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD86D358-3346-4C7D-8CF6-87E060B71D34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
