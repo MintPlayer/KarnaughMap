@@ -1,7 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Pieterjan De Clippel</Authors>
+    <Company>MintPlayer</Company>
+    <Description>.NET Implementation of the Quine-McCluskey algorithm</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/MintPlayer/QuineMcCluskey</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MintPlayer/QuineMcCluskey</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>Quine-McCluskey algorithm, logic simplification</PackageTags>
   </PropertyGroup>
 
 </Project>
