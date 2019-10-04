@@ -11,7 +11,7 @@ namespace QuineMcCluskey
 {
     public static class QuineMcCluskeySolver
     {
-        public static IEnumerable<Data.QuineMcCluskey.Table1.Loop> QMC_Solve(IEnumerable<int> minterms, IEnumerable<int> dontcares)
+        public static IEnumerable<RequiredLoop> QMC_Solve(IEnumerable<int> minterms, IEnumerable<int> dontcares)
         {
             //var table = QMC_CreateTable(minterms, dontcares);
 
@@ -28,7 +28,7 @@ namespace QuineMcCluskey
 
             SolveTable2(table2);
 
-            return table2.Rows.Where(r => r.Status == Data.QuineMcCluskey.Table2.eRowStatus.Required).Select(r => r.Loop);
+            return table2.Rows.Where(r => r.Status == Data.QuineMcCluskey.Table2.eRowStatus.Required).Select(r => new RequiredLoop(r.Loop));
         }
 
         private static Table1 CreateTable1(IEnumerable<int> minterms)

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
 {
-    public class Loop
+    internal class Loop
     {
         public Loop(int[] minTerms, LogicState[] data)
         {

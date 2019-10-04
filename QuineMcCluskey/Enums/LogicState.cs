@@ -1,6 +1,6 @@
 ﻿namespace QuineMcCluskey.Enums
 {
-    public enum LogicState
+    internal enum LogicState
     {
         False,
         True,
