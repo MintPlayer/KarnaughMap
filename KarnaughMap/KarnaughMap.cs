@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Linq;
+using QuineMcCluskey.Enums;
 
 namespace KarnaughMap
 {
@@ -90,6 +91,24 @@ namespace KarnaughMap
                 case Keys.Space:
                     ToggleNumber(GridIndexToNumber(focusedCell));
                     break;
+
+
+                case Keys.D0:
+                case Keys.NumPad0:
+                    SetValue(GridIndexToNumber(focusedCell), eCellValue.Zero);
+                    break;
+                case Keys.D1:
+                case Keys.NumPad1:
+                    SetValue(GridIndexToNumber(focusedCell), eCellValue.One);
+                    break;
+                case Keys.X:
+                    SetValue(GridIndexToNumber(focusedCell), eCellValue.DontCare);
+                    break;
+                case Keys.OemMinus:
+                    SetValue(GridIndexToNumber(focusedCell), eCellValue.Undefined);
+                    break;
+
+
                 default:
                     return;
             }
@@ -241,6 +260,36 @@ namespace KarnaughMap
                 {
                     zeros.Add(index);
                 }
+            }
+        }
+        private void SetValue(int index, eCellValue value)
+        {
+            switch (value)
+            {
+                case eCellValue.Zero:
+                    if (!zeros.Contains(index))
+                        zeros.Add(index);
+                    if (ones.Contains(index))
+                        ones.Remove(index);
+                    break;
+                case eCellValue.One:
+                    if (zeros.Contains(index))
+                        zeros.Remove(index);
+                    if (!ones.Contains(index))
+                        ones.Add(index);
+                    break;
+                case eCellValue.DontCare:
+                    if (!zeros.Contains(index))
+                        zeros.Add(index);
+                    if (!ones.Contains(index))
+                        ones.Add(index);
+                    break;
+                case eCellValue.Undefined:
+                    if (zeros.Contains(index))
+                        zeros.Remove(index);
+                    if (ones.Contains(index))
+                        ones.Remove(index);
+                    break;
             }
         }
         #endregion

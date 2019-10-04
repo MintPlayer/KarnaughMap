@@ -9,9 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuineMcCluskey.Test", "Quin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KarnaughMap.Test", "KarnaughMap.Test\KarnaughMap.Test.csproj", "{BD86D358-3346-4C7D-8CF6-87E060B71D34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KarnaughMap", "KarnaughMap\KarnaughMap.csproj", "{5219FED0-CA20-4786-BAFC-52B66FFA87A6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApp1", "WindowsFormsApp1\WindowsFormsApp1.csproj", "{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KarnaughMap", "KarnaughMap\KarnaughMap.csproj", "{5219FED0-CA20-4786-BAFC-52B66FFA87A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B85666DC-1C59-4138-A5E9-4F16FE6A8EB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
