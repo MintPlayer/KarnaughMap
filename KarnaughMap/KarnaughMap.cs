@@ -23,6 +23,10 @@ namespace KarnaughMap
             Paint += KarnaughMap_Paint;
             MouseClick += KarnaughMap_MouseClick;
             KeyDown += KarnaughMap_KeyDown;
+
+            EventHandler invalidateDelegate = (sender, e) => { Invalidate(); };
+            GotFocus += invalidateDelegate;
+            LostFocus += invalidateDelegate;
         }
 
         const int gridSize = 40;
@@ -111,7 +115,7 @@ namespace KarnaughMap
 
             // Draw the x-axis title
             e.Graphics.DrawString(string.Join(", ", varsX), Font, Brushes.Black, new RectangleF(gridSize, -Font.Height, columnCount * gridSize, Font.Height), sf);
-            
+
             // Draw the grid
             for (int i = 0; i <= columnCount; i++)
                 e.Graphics.DrawLine(System.Drawing.Pens.Black, gridSize * (i + 1), gridSize, gridSize * (i + 1), gridSize * (rowCount + 1));
@@ -172,10 +176,13 @@ namespace KarnaughMap
             }
 
             // Draw the focused cell
-            var rct = new Rectangle((focusedCell.X + 1) * gridSize, (focusedCell.Y + 1) * gridSize, gridSize, gridSize);
-            rct.Inflate(-2, -2);
-            var pen = new Pen(Color.Black, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dot };
-            e.Graphics.DrawRectangle(pen, rct);
+            if (Focused)
+            {
+                var rct = new Rectangle((focusedCell.X + 1) * gridSize, (focusedCell.Y + 1) * gridSize, gridSize, gridSize);
+                rct.Inflate(-2, -2);
+                var pen = new Pen(Color.Black, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dot };
+                e.Graphics.DrawRectangle(pen, rct);
+            }
         }
 
         private void KarnaughMap_MouseClick(object sender, MouseEventArgs e)
@@ -185,6 +192,8 @@ namespace KarnaughMap
 
             var x = (e.X - gridSize - Font.Height) / gridSize;
             var y = (e.Y - gridSize - Font.Height) / gridSize;
+
+            focusedCell = new Point(x, y);
 
             var i_gray = GrayCodeConverter.Decimal2Gray(x);
             var j_gray = GrayCodeConverter.Decimal2Gray(y);

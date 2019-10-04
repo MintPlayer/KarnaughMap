@@ -5,4 +5,8 @@
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="QuineMcCluskey" Version="1.0.1" />
+  </ItemGroup>
+
 </Project>

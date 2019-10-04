@@ -11,6 +11,9 @@
     <RepositoryUrl>https://github.com/MintPlayer/QuineMcCluskey</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>Quine-McCluskey algorithm, logic simplification</PackageTags>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>

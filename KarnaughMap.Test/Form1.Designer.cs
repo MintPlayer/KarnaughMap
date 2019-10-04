@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
 
             this.karnaughMap1 = new KarnaughMap();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // karnaughMap1
@@ -46,11 +47,21 @@
             this.karnaughMap1.InputVariables.Add("D");
             this.karnaughMap1.InputVariables.Add("E");
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(13, 13);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(150, 25);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Give me focus";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.karnaughMap1);
             this.Name = "Form1";
             this.Text = "Form1";
@@ -60,6 +71,7 @@
         #endregion
 
         private KarnaughMap karnaughMap1;
+        private System.Windows.Forms.Button button1;
     }
 }
 
