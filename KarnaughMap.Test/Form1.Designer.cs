@@ -37,8 +37,14 @@
             // 
             this.karnaughMap1.Location = new System.Drawing.Point(156, 51);
             this.karnaughMap1.Name = "karnaughMap1";
+            this.karnaughMap1.OutputVariable = null;
             this.karnaughMap1.Size = new System.Drawing.Size(50, 50);
             this.karnaughMap1.TabIndex = 0;
+            this.karnaughMap1.InputVariables.Add("A");
+            this.karnaughMap1.InputVariables.Add("B");
+            this.karnaughMap1.InputVariables.Add("C");
+            this.karnaughMap1.InputVariables.Add("D");
+            this.karnaughMap1.InputVariables.Add("E");
             // 
             // Form1
             // 

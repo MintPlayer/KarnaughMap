@@ -33,7 +33,7 @@
             // 
             // karnaughMap1
             // 
-            this.karnaughMap1.Location = new System.Drawing.Point(85, 65);
+            this.karnaughMap1.Location = new System.Drawing.Point(260, 85);
             this.karnaughMap1.Name = "karnaughMap1";
             this.karnaughMap1.OutputVariable = null;
             this.karnaughMap1.Size = new System.Drawing.Size(50, 50);
