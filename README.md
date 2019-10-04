@@ -9,4 +9,5 @@ Open the NuGet package manager and install the **QuineMcCluskey** package in the
 Install-Package QuineMcCluskey
 ## Usage
 Simply call the following method with the required minterms and don't-cares:
+
     var loops = QuineMcCluskeySolver.QMC_Solve(minterms, dontcares);
