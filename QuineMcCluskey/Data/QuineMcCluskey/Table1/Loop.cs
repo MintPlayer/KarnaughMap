@@ -29,6 +29,24 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
             }).ToArray());
         }
 
+        public string ToString(string[] inputVariables)
+        {
+            return string.Join(" ", Data.Select((d, index) =>
+            {
+                switch (d)
+                {
+                    case LogicState.False:
+                        return $"{inputVariables[index]}!";
+                    case LogicState.True:
+                        return inputVariables[index];
+                    default:
+                        return string.Empty;
+                }
+            }).Where(s => 
+                s != string.Empty
+            ));
+        }
+
         internal static Loop CompareItems(Loop item1, Loop item2)
         {
             var result = new List<LogicState>();

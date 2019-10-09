@@ -1,18 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace QuineMcCluskey
+﻿namespace QuineMcCluskey
 {
     public class RequiredLoop
     {
         internal RequiredLoop(Data.QuineMcCluskey.Table1.Loop loop)
         {
             MinTerms = loop.MinTerms;
-            Text = loop.ToString();
+            this.loop = loop;
         }
 
+        private Data.QuineMcCluskey.Table1.Loop loop;
+
         public int[] MinTerms { get; private set; }
-        public string Text { get; private set; }
+
+        public override string ToString()
+        {
+            return loop.ToString();
+        }
+        public string ToString(string[] inputVariables)
+        {
+            return loop.ToString(inputVariables);
+        }
     }
 }

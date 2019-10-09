@@ -8,6 +8,9 @@ using System.Windows.Forms;
 using System.Collections.ObjectModel;
 using System.Linq;
 using QuineMcCluskey.Enums;
+using System.Threading.Tasks;
+using KarnaughMap.EventArgs;
+using KarnaughMap.EventHandlers;
 
 namespace KarnaughMap
 {
@@ -43,6 +46,9 @@ namespace KarnaughMap
 
         private List<int> ones = new List<int>();
         private List<int> zeros = new List<int>();
+
+        private IEnumerable<QuineMcCluskey.RequiredLoop> loops_ones = new List<QuineMcCluskey.RequiredLoop>();
+        private IEnumerable<QuineMcCluskey.RequiredLoop> loops_zeros = new List<QuineMcCluskey.RequiredLoop>();
 
         private void InputVariables_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -168,6 +174,21 @@ namespace KarnaughMap
             // Restore the transform
             e.Graphics.Transform = grid_transform;
 
+            // Fill the boxes
+            foreach (var minterm in loops_ones.SelectMany(l => l.MinTerms).Distinct())
+            {
+                var y_gray = minterm >> varsX.Length;
+                var x_gray = minterm - (y_gray << varsX.Length);
+
+                var pos = new Point(
+                    GrayCodeConverter.Gray2Decimal(x_gray),
+                    GrayCodeConverter.Gray2Decimal(y_gray)
+                );
+
+                //e.Graphics.FillRectangles()
+                e.Graphics.FillRectangle(Brushes.Olive, (pos.X + 1) * gridSize, (pos.Y + 1) * gridSize, gridSize, gridSize);
+            }
+
             // Draw the box values
             for (int i = 0; i < columnCount; i++)
             {
@@ -220,6 +241,42 @@ namespace KarnaughMap
             ToggleNumber(index);
 
             Invalidate();
+        }
+
+        public async Task RandomFill()
+        {
+            ones = await CalculateRandomNumbers(1 << InputVariables.Count);
+            zeros = await CalculateRandomNumbers(1 << InputVariables.Count);
+            Invalidate();
+        }
+
+        public event KarnaughMapSolvedEventHandler KarnaughMapSolved;
+        public async Task Solve()
+        {
+            var dontcares = ones.Intersect(zeros);
+            loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
+            loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
+            Invalidate();
+
+            if (KarnaughMapSolved != null)
+                KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
+        }
+
+
+
+        private async Task<List<int>> CalculateRandomNumbers(int max)
+        {
+            var random = new Random();
+            var list = new List<int>();
+            await Task.Run(() =>
+            {
+                for (int i = 0; i < max; i++)
+                {
+                    var num = random.Next(max);
+                    if (!list.Contains(num)) list.Add(num);
+                }
+            });
+            return list;
         }
 
         #region Helper methods

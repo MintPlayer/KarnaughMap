@@ -16,5 +16,23 @@ namespace KarnaughMap.Test
         {
             InitializeComponent();
         }
+
+        private async void BtnRandomFill_Click(object sender, System.EventArgs e)
+        {
+            await karnaughMap1.RandomFill();
+        }
+
+        private async void BtnSolve_Click(object sender, System.EventArgs e)
+        {
+            await karnaughMap1.Solve();
+        }
+
+        private void KarnaughMap1_KarnaughMapSolved(object sender, EventArgs.KarnaughMapSolvedEventArgs e)
+        {
+            lstLoopOnes.Items.Clear();
+            lstLoopOnes.Items.AddRange(e.LoopsOnes.Select(l => l.ToString(karnaughMap1.InputVariables.ToArray())).ToArray());
+            lstLoopZeros.Items.Clear();
+            lstLoopZeros.Items.AddRange(e.LoopsZeros.Select(l => l.ToString(karnaughMap1.InputVariables.ToArray())).ToArray());
+        }
     }
 }
