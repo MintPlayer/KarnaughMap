@@ -19,7 +19,7 @@ namespace QuineMcCluskey.Test
                         
             while (true)
             {
-                var loops = QuineMcCluskeySolver.QMC_Solve(new[] { 1 }, new int[] { 3, 7 });
+                var loops = QuineMcCluskeySolver.QMC_Solve(new int[] { }, new int[] { });
 
                 Console.ReadKey();
             }

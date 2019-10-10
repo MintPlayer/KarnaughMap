@@ -24,7 +24,7 @@ namespace QuineMcCluskey
                 .SelectMany(g => g.Records)
                 .Where(r => !r.Used);
 
-            var table2 = CreateTable2(minterms.ToList(), unused.ToList());
+            var table2 = CreateTable2(minterms.Except(dontcares).ToList(), unused.ToList());
 
             SolveTable2(table2);
 
@@ -34,6 +34,9 @@ namespace QuineMcCluskey
         private static Table1 CreateTable1(IEnumerable<int> minterms)
         {
             var table = new Table1();
+
+            // If there are no minterms at all, return empty table
+            if (!minterms.Any()) return table;
 
             // Convert to binary
             var bin_minterms = minterms.Select(m => new

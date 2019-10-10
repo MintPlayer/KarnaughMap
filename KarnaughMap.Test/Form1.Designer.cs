@@ -35,6 +35,7 @@
             this.btnSolve = new System.Windows.Forms.Button();
             this.lstLoopOnes = new System.Windows.Forms.ListBox();
             this.lstLoopZeros = new System.Windows.Forms.ListBox();
+            this.cmbMode = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // karnaughMap1
@@ -80,7 +81,18 @@
             this.lstLoopZeros.Location = new System.Drawing.Point(20, 365);
             this.lstLoopZeros.Name = "lstLoopOnes";
             this.lstLoopZeros.Size = new System.Drawing.Size(200, 300);
-            this.lstLoopZeros.TabIndex = 3;
+            this.lstLoopZeros.TabIndex = 4;
+            //
+            // cmbMode
+            //
+            this.cmbMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMode.Items.AddRange(new string[] { "Edit", "Solve" });
+            this.cmbMode.Location = new System.Drawing.Point(340, 14);
+            this.cmbMode.Name = "cmbMode";
+            this.cmbMode.SelectedIndex = 0;
+            this.cmbMode.Size = new System.Drawing.Size(200, 25);
+            this.cmbMode.TabIndex = 5;
+            this.cmbMode.SelectedIndexChanged += cmbMode_SelectedIndexChanged;
             // 
             // Form1
             // 
@@ -92,6 +104,7 @@
             this.Controls.Add(this.karnaughMap1);
             this.Controls.Add(this.lstLoopOnes);
             this.Controls.Add(this.lstLoopZeros);
+            this.Controls.Add(this.cmbMode);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -103,6 +116,7 @@
         private System.Windows.Forms.Button btnSolve;
         private System.Windows.Forms.ListBox lstLoopOnes;
         private System.Windows.Forms.ListBox lstLoopZeros;
+        private System.Windows.Forms.ComboBox cmbMode;
     }
 }
 

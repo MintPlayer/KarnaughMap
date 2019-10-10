@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KarnaughMap
+﻿namespace KarnaughMap.Enums
 {
-    /// <summary>This enum defines a cell state for a karnaugh map cell</summary>
+    /// <summary>Defines a cell state for a karnaugh map cell.</summary>
     internal enum eCellValue
     {
         /// <summary>0</summary>

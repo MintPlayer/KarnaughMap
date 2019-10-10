@@ -34,5 +34,10 @@ namespace KarnaughMap.Test
             lstLoopZeros.Items.Clear();
             lstLoopZeros.Items.AddRange(e.LoopsZeros.Select(l => l.ToString(karnaughMap1.InputVariables.ToArray())).ToArray());
         }
+
+        private void cmbMode_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            karnaughMap1.Mode = (Enums.eEditMode)cmbMode.SelectedIndex;
+        }
     }
 }

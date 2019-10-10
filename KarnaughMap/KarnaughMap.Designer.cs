@@ -30,6 +30,11 @@
         {
             components = new System.ComponentModel.Container();
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+
+            Paint += KarnaughMap_Paint;
+            MouseClick += KarnaughMap_MouseClick;
+            KeyDown += KarnaughMap_KeyDown;
+
         }
 
         #endregion
