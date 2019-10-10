@@ -46,8 +46,6 @@
             this.karnaughMap1.InputVariables.Add("A");
             this.karnaughMap1.InputVariables.Add("B");
             this.karnaughMap1.InputVariables.Add("C");
-            this.karnaughMap1.InputVariables.Add("D");
-            this.karnaughMap1.InputVariables.Add("E");
             this.karnaughMap1.KarnaughMapSolved += KarnaughMap1_KarnaughMapSolved;
             // 
             // btnRandomFill

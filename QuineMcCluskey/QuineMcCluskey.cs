@@ -142,7 +142,8 @@ namespace QuineMcCluskey
 
                         // Mark columns for this row as used.
                         foreach (var minterm in required_row.Loop.MinTerms)
-                            table.Columns.First(c => c.Minterm == minterm).Status = Data.QuineMcCluskey.Table2.eColumnStatus.Used;
+                            if (table.Columns.Any(c => c.Minterm == minterm))
+                                table.Columns.First(c => c.Minterm == minterm).Status = Data.QuineMcCluskey.Table2.eColumnStatus.Used;
                     }
                     #endregion
                 }

@@ -10,16 +10,16 @@ namespace QuineMcCluskey.Test
         static void Main(string[] args)
         {
             var random = new Random();
-            var list = new List<int>();
-            for (int i = 0; i < 16; i++)
-            {
-                var num = random.Next(16);
-                if (!list.Contains(num)) list.Add(num);
-            }
-            
+            //var list = new List<int>();
+            //for (int i = 0; i < 16; i++)
+            //{
+            //    var num = random.Next(16);
+            //    if (!list.Contains(num)) list.Add(num);
+            //}
+                        
             while (true)
             {
-                var loops = QuineMcCluskeySolver.QMC_Solve(list, new int[] { });
+                var loops = QuineMcCluskeySolver.QMC_Solve(new[] { 1 }, new int[] { 3, 7 });
 
                 Console.ReadKey();
             }
