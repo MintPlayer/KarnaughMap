@@ -96,10 +96,10 @@
             this.cmbMode.Items.AddRange(new string[] { "Edit", "Solve" });
             this.cmbMode.Location = new System.Drawing.Point(340, 14);
             this.cmbMode.Name = "cmbMode";
-            this.cmbMode.SelectedIndex = 0;
             this.cmbMode.Size = new System.Drawing.Size(200, 25);
             this.cmbMode.TabIndex = 5;
             this.cmbMode.SelectedIndexChanged += cmbMode_SelectedIndexChanged;
+            this.cmbMode.SelectedIndex = 0;
             // 
             // Form1
             // 

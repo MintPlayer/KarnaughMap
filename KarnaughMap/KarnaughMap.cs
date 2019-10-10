@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.Design.Serialization;
 using KarnaughMap.EventArgs;
 using KarnaughMap.EventHandlers;
+using KarnaughMap.Extensions;
 
 namespace KarnaughMap
 {
@@ -19,7 +20,12 @@ namespace KarnaughMap
             InitializeComponent();
             DoubleBuffered = true;
 
+            InputVariables = new ObservableCollection<string>();
             InputVariables.CollectionChanged += InputVariables_CollectionChanged;
+            loops_ones = new ObservableCollection<QuineMcCluskey.RequiredLoop>();
+            loops_ones.CollectionChanged += Loops_ones_CollectionChanged;
+            loops_zeros = new ObservableCollection<QuineMcCluskey.RequiredLoop>();
+            loops_zeros.CollectionChanged += Loops_zeros_CollectionChanged;
 
             EventHandler invalidateDelegate = (sender, e) => Invalidate();
             GotFocus += invalidateDelegate;
@@ -48,9 +54,9 @@ namespace KarnaughMap
         /// <summary>Holds the minterms that are selected</summary>
         private List<int> selectedCells = new List<int>();
         /// <summary>Holds the required loops for "high".</summary>
-        private IEnumerable<QuineMcCluskey.RequiredLoop> loops_ones = new List<QuineMcCluskey.RequiredLoop>();
+        private ObservableCollection<QuineMcCluskey.RequiredLoop> loops_ones;
         /// <summary>Holds the required loops for "low".</summary>
-        private IEnumerable<QuineMcCluskey.RequiredLoop> loops_zeros = new List<QuineMcCluskey.RequiredLoop>();
+        private ObservableCollection<QuineMcCluskey.RequiredLoop> loops_zeros;
         #endregion
         #region Private methods
         /// <summary>Gets the minterm value for a specified grid position</summary>
@@ -172,15 +178,59 @@ namespace KarnaughMap
                 Invalidate();
             }
         }
+        public async Task SolveSelection()
+        {
+            try
+            {
+                if (mode == Enums.eEditMode.Solve)
+                {
+                    // Check if there were selected cells
+                    if (!selectedCells.Any()) throw new Exception("Please select some cells to join.");
+
+                    // Check if cells have the same value
+                    if (selectedCells.Intersect(ones).Count() != selectedCells.Count) throw new Exception("Selected minterms must have the same value.");
+                    if (selectedCells.Intersect(zeros).Count() != selectedCells.Count) throw new Exception("Selected minterms must have the same value.");
+                 
+                    // Check if at least one cell has a value
+                    if (ones.Intersect(zeros).Count() == selectedCells.Count) throw new Exception("Selected minterms cannot all be don't cares.");
+
+                    var result = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(selectedCells, new List<int>()).ToList();
+
+                    // Check if selection resolves to one loop.
+                    if (result.Count != 1) throw new Exception("Selected minterms cannot be simplified.");
+
+                    // Find out the value of the loop
+                    var value = ones.Intersect(selectedCells).Any();
+
+                    //if (value) loops_ones.Add(new QuineMcCluskey.RequiredLoop(result.First()));
+                    //else loops_zeros.Add(new QuineMcCluskey.RequiredLoop(result.First()));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
         /// <summary>Solve the Karnaugh map using the Quine McCluskey algorithm.</summary>
-        public async Task Solve()
+        public async Task SolveAutomatically()
         {
             if (mode == Enums.eEditMode.Solve)
             {
+                SuspendLayout();
+
                 var dontcares = ones.Intersect(zeros);
-                loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
-                loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
-                Invalidate();
+                var loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
+                var loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
+
+                this.loops_ones.Clear();
+                this.loops_ones.AddRange(loops_ones);
+                //foreach (var loop in loops_ones) this.loops_ones.Add(loop);
+                this.loops_zeros.Clear();
+                this.loops_zeros.AddRange(loops_zeros);
+                //foreach (var loop in loops_zeros) this.loops_zeros.Add(loop);
+
+                ResumeLayout();
+                //Invalidate();
 
                 if (KarnaughMapSolved != null)
                     KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
@@ -191,7 +241,7 @@ namespace KarnaughMap
 
         #region InputVariables
         /// <summary>Names of the input variables.</summary>
-        public ObservableCollection<string> InputVariables { get; private set; } = new ObservableCollection<string>();
+        public ObservableCollection<string> InputVariables { get; private set; }
         #endregion
         #region OutputVariable
         private string outputVariable;
@@ -223,8 +273,8 @@ namespace KarnaughMap
 
                     if (mode == Enums.eEditMode.Edit)
                     {
-                        loops_ones = new List<QuineMcCluskey.RequiredLoop>();
-                        loops_zeros = new List<QuineMcCluskey.RequiredLoop>();
+                        loops_ones.Clear();
+                        loops_zeros.Clear();
                         selectedCells.Clear();
                     }
                     else
@@ -271,6 +321,14 @@ namespace KarnaughMap
             columnCount = 1 << varsXcount;
 
             Invalidate();
+        }
+        private void Loops_ones_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            
+        }
+        private void Loops_zeros_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+
         }
         private void KarnaughMap_KeyDown(object sender, KeyEventArgs e)
         {

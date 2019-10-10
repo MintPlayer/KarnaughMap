@@ -24,7 +24,7 @@ namespace KarnaughMap.Test
 
         private async void BtnSolve_Click(object sender, System.EventArgs e)
         {
-            await karnaughMap1.Solve();
+            await karnaughMap1.SolveAutomatically();
         }
 
         private List<QuineMcCluskey.RequiredLoop> loopsOnes;
@@ -46,6 +46,10 @@ namespace KarnaughMap.Test
             if (!ignoreSelectedModeChanging)
             {
                 karnaughMap1.Mode = (Enums.eEditMode)cmbMode.SelectedIndex;
+                btnRandomFill.Enabled = cmbMode.SelectedIndex == 0;
+                btnSolve.Enabled = cmbMode.SelectedIndex == 1;
+                lstLoopOnes.Items.Clear();
+                lstLoopZeros.Items.Clear();
             }
         }
 
