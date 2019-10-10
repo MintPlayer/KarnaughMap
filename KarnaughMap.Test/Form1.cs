@@ -27,17 +27,53 @@ namespace KarnaughMap.Test
             await karnaughMap1.Solve();
         }
 
+        private List<QuineMcCluskey.RequiredLoop> loopsOnes;
+        private List<QuineMcCluskey.RequiredLoop> loopsZeros;
         private void KarnaughMap1_KarnaughMapSolved(object sender, EventArgs.KarnaughMapSolvedEventArgs e)
         {
+            loopsOnes = e.LoopsOnes;
+            loopsZeros = e.LoopsZeros;
+
             lstLoopOnes.Items.Clear();
             lstLoopOnes.Items.AddRange(e.LoopsOnes.Select(l => l.ToString(karnaughMap1.InputVariables.ToArray())).ToArray());
             lstLoopZeros.Items.Clear();
             lstLoopZeros.Items.AddRange(e.LoopsZeros.Select(l => l.ToString(karnaughMap1.InputVariables.ToArray())).ToArray());
         }
 
+        private bool ignoreSelectedModeChanging = false;
         private void cmbMode_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            karnaughMap1.Mode = (Enums.eEditMode)cmbMode.SelectedIndex;
+            if (!ignoreSelectedModeChanging)
+            {
+                karnaughMap1.Mode = (Enums.eEditMode)cmbMode.SelectedIndex;
+            }
+        }
+
+        private void KarnaughMap1_ModeChanging(object sender, EventArgs.ModeChangingEventArgs e)
+        {
+            if (karnaughMap1.HasLoops)
+            {
+                if (e.NewValue == Enums.eEditMode.Edit)
+                {
+                    if (MessageBox.Show("This will remove all loops. Are you sure?", "Edit mode", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+                    {
+                        e.Cancel = true;
+                        ignoreSelectedModeChanging = true;
+                        cmbMode.SelectedIndex = (int)e.OldValue;
+                        ignoreSelectedModeChanging = false;
+                    }
+                }
+            }
+        }
+
+        private void LstLoopZeros_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            karnaughMap1.SelectedLoop = loopsZeros[lstLoopZeros.SelectedIndex];
+        }
+
+        private void LstLoopOnes_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            karnaughMap1.SelectedLoop = loopsOnes[lstLoopOnes.SelectedIndex];
         }
     }
 }

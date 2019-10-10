@@ -47,7 +47,12 @@
             this.karnaughMap1.InputVariables.Add("A");
             this.karnaughMap1.InputVariables.Add("B");
             this.karnaughMap1.InputVariables.Add("C");
+            this.karnaughMap1.InputVariables.Add("D");
+            this.karnaughMap1.InputVariables.Add("E");
+            this.karnaughMap1.InputVariables.Add("F");
+            this.karnaughMap1.InputVariables.Add("G");
             this.karnaughMap1.KarnaughMapSolved += KarnaughMap1_KarnaughMapSolved;
+            this.karnaughMap1.ModeChanging += KarnaughMap1_ModeChanging;
             // 
             // btnRandomFill
             // 
@@ -75,6 +80,7 @@
             this.lstLoopOnes.Name = "lstLoopOnes";
             this.lstLoopOnes.Size = new System.Drawing.Size(200, 300);
             this.lstLoopOnes.TabIndex = 3;
+            this.lstLoopOnes.SelectedIndexChanged += LstLoopOnes_SelectedIndexChanged;
             //
             // lstLoopZeros
             //
@@ -82,6 +88,7 @@
             this.lstLoopZeros.Name = "lstLoopOnes";
             this.lstLoopZeros.Size = new System.Drawing.Size(200, 300);
             this.lstLoopZeros.TabIndex = 4;
+            this.lstLoopZeros.SelectedIndexChanged += LstLoopZeros_SelectedIndexChanged;
             //
             // cmbMode
             //

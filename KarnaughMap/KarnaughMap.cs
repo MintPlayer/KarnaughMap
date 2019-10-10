@@ -165,20 +165,26 @@ namespace KarnaughMap
         /// <summary>Fill the Karnaugh map randomly.</summary>
         public async Task RandomFill()
         {
-            ones = await CalculateRandomNumbers(1 << InputVariables.Count);
-            zeros = await CalculateRandomNumbers(1 << InputVariables.Count);
-            Invalidate();
+            if (mode == Enums.eEditMode.Edit)
+            {
+                ones = await CalculateRandomNumbers(1 << InputVariables.Count);
+                zeros = await CalculateRandomNumbers(1 << InputVariables.Count);
+                Invalidate();
+            }
         }
         /// <summary>Solve the Karnaugh map using the Quine McCluskey algorithm.</summary>
         public async Task Solve()
         {
-            var dontcares = ones.Intersect(zeros);
-            loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
-            loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
-            Invalidate();
+            if (mode == Enums.eEditMode.Solve)
+            {
+                var dontcares = ones.Intersect(zeros);
+                loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
+                loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
+                Invalidate();
 
-            if (KarnaughMapSolved != null)
-                KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
+                if (KarnaughMapSolved != null)
+                    KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
+            }
         }
         #endregion
         #region Properties
@@ -208,7 +214,44 @@ namespace KarnaughMap
             get { return mode; }
             set
             {
-                mode = value;
+                var args = new ModeChangingEventArgs(mode, value);
+                if (ModeChanging != null) ModeChanging(this, args);
+
+                if (!args.Cancel)
+                {
+                    mode = value;
+
+                    if (mode == Enums.eEditMode.Edit)
+                    {
+                        loops_ones = new List<QuineMcCluskey.RequiredLoop>();
+                        loops_zeros = new List<QuineMcCluskey.RequiredLoop>();
+                        selectedCells.Clear();
+                    }
+                    else
+                    {
+
+                    }
+                    Invalidate();
+                }
+            }
+        }
+        public event ModeChangingEventHandler ModeChanging;
+        #endregion
+        #region HasLoops
+        public bool HasLoops
+        {
+            get => loops_ones.Any() & loops_zeros.Any();
+        }
+        #endregion
+        #region SelectedLoop
+        private QuineMcCluskey.RequiredLoop selected_loop;
+        public QuineMcCluskey.RequiredLoop SelectedLoop
+        {
+            get { return selected_loop; }
+            set
+            {
+                selected_loop = value;
+                selectedCells = value.MinTerms.ToList();
                 Invalidate();
             }
         }
