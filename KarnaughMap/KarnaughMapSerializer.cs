@@ -1,5 +1,6 @@
 ﻿using System.CodeDom;
 using System.ComponentModel.Design.Serialization;
+using System.Linq;
 
 namespace KarnaughMap
 {
@@ -31,8 +32,11 @@ namespace KarnaughMap
                     statements.Add(
                         new CodeMethodInvokeExpression(
                             new CodePropertyReferenceExpression(targetObject, "InputVariables"),
-                            "Add",
-                            new CodePrimitiveExpression(input)
+                            "AddRange",
+                            new CodeArrayCreateExpression(
+                                new CodeTypeReference(typeof(string)),
+                                karnaughMap.InputVariables.Select(i => new CodePrimitiveExpression(i)).ToArray()
+                            )
                         )
                     );
                 }

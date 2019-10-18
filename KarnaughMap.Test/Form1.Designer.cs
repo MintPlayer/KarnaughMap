@@ -44,13 +44,7 @@
             this.karnaughMap1.Name = "karnaughMap1";
             this.karnaughMap1.OutputVariable = "X";
             this.karnaughMap1.TabIndex = 0;
-            this.karnaughMap1.InputVariables.Add("A");
-            this.karnaughMap1.InputVariables.Add("B");
-            this.karnaughMap1.InputVariables.Add("C");
-            this.karnaughMap1.InputVariables.Add("D");
-            this.karnaughMap1.InputVariables.Add("E");
-            this.karnaughMap1.InputVariables.Add("F");
-            this.karnaughMap1.InputVariables.Add("G");
+            this.karnaughMap1.InputVariables.AddRange(new string[] { "A", "B", "C", "D", "E", "F", "G" });
             this.karnaughMap1.KarnaughMapSolved += KarnaughMap1_KarnaughMapSolved;
             this.karnaughMap1.ModeChanging += KarnaughMap1_ModeChanging;
             // 

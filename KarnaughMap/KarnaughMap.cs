@@ -4,11 +4,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.Design.Serialization;
 using KarnaughMap.EventArgs;
 using KarnaughMap.EventHandlers;
-using KarnaughMap.Extensions;
 
 namespace KarnaughMap
 {
@@ -20,11 +18,11 @@ namespace KarnaughMap
             InitializeComponent();
             DoubleBuffered = true;
 
-            InputVariables = new ObservableCollection<string>();
+            InputVariables = new MintPlayer.ObservableCollection.ObservableCollection<string>();
             InputVariables.CollectionChanged += InputVariables_CollectionChanged;
-            loops_ones = new ObservableCollection<QuineMcCluskey.RequiredLoop>();
+            loops_ones = new MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop>();
             loops_ones.CollectionChanged += Loops_ones_CollectionChanged;
-            loops_zeros = new ObservableCollection<QuineMcCluskey.RequiredLoop>();
+            loops_zeros = new MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop>();
             loops_zeros.CollectionChanged += Loops_zeros_CollectionChanged;
 
             EventHandler invalidateDelegate = (sender, e) => Invalidate();
@@ -54,9 +52,9 @@ namespace KarnaughMap
         /// <summary>Holds the minterms that are selected</summary>
         private List<int> selectedCells = new List<int>();
         /// <summary>Holds the required loops for "high".</summary>
-        private ObservableCollection<QuineMcCluskey.RequiredLoop> loops_ones;
+        private MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop> loops_ones;
         /// <summary>Holds the required loops for "low".</summary>
-        private ObservableCollection<QuineMcCluskey.RequiredLoop> loops_zeros;
+        private MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop> loops_zeros;
         #endregion
         #region Private methods
         /// <summary>Gets the minterm value for a specified grid position</summary>
@@ -224,13 +222,12 @@ namespace KarnaughMap
 
                 this.loops_ones.Clear();
                 this.loops_ones.AddRange(loops_ones);
-                //foreach (var loop in loops_ones) this.loops_ones.Add(loop);
+
                 this.loops_zeros.Clear();
                 this.loops_zeros.AddRange(loops_zeros);
-                //foreach (var loop in loops_zeros) this.loops_zeros.Add(loop);
 
                 ResumeLayout();
-                //Invalidate();
+                Invalidate();
 
                 if (KarnaughMapSolved != null)
                     KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
@@ -241,7 +238,7 @@ namespace KarnaughMap
 
         #region InputVariables
         /// <summary>Names of the input variables.</summary>
-        public ObservableCollection<string> InputVariables { get; private set; }
+        public MintPlayer.ObservableCollection.ObservableCollection<string> InputVariables { get; private set; }
         #endregion
         #region OutputVariable
         private string outputVariable;
