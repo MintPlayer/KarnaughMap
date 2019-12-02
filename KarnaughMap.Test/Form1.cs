@@ -27,8 +27,30 @@ namespace KarnaughMap.Test
             await karnaughMap1.SolveAutomatically();
         }
 
+        private async void BtnSolveSelection_Click(object sender, System.EventArgs e)
+        {
+            await karnaughMap1.SolveSelection();
+        }
+
         private List<QuineMcCluskey.RequiredLoop> loopsOnes;
         private List<QuineMcCluskey.RequiredLoop> loopsZeros;
+
+        private void KarnaughMap1_KarnaughLoopAdded(object sender, EventArgs.KarnaughLoopAddedEventArgs e)
+        {
+            if (loopsOnes == null) loopsOnes = new List<QuineMcCluskey.RequiredLoop>();
+            if (loopsZeros == null) loopsZeros = new List<QuineMcCluskey.RequiredLoop>();
+
+            if (e.Value)
+            {
+                loopsOnes.Add(e.Loop);
+                lstLoopOnes.Items.Add(e.Loop.ToString(karnaughMap1.InputVariables.ToArray()));
+            }
+            else
+            {
+                loopsZeros.Add(e.Loop);
+                lstLoopZeros.Items.Add(e.Loop.ToString(karnaughMap1.InputVariables.ToArray()));
+            }
+        }
         private void KarnaughMap1_KarnaughMapSolved(object sender, EventArgs.KarnaughMapSolvedEventArgs e)
         {
             loopsOnes = e.LoopsOnes;
@@ -77,7 +99,7 @@ namespace KarnaughMap.Test
 
         private void LstLoopOnes_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            karnaughMap1.SelectedLoop = loopsOnes[lstLoopOnes.SelectedIndex];
+            karnaughMap1.SelectedLoop = lstLoopOnes.SelectedIndex == -1 ? null : loopsOnes[lstLoopOnes.SelectedIndex];
         }
     }
 }

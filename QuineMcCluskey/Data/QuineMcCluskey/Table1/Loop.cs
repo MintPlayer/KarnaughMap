@@ -31,20 +31,41 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
 
         public string ToString(string[] inputVariables)
         {
-            return string.Join(" ", Data.Select((d, index) =>
+            //return string.Join(" ", Data.Select((d, index) =>
+            //{
+            //    switch (d)
+            //    {
+            //        case LogicState.False:
+            //            return $"{inputVariables[index]}!";
+            //        case LogicState.True:
+            //            return inputVariables[index];
+            //        default:
+            //            return string.Empty;
+            //    }
+            //}).Where(s =>
+            //    s != string.Empty
+            //));
+
+            return string.Join(" ", inputVariables.Select((v, index) =>
             {
-                switch (d)
+                var t = Data.Length - index - 1;
+                if (t < 0)
                 {
-                    case LogicState.False:
-                        return $"{inputVariables[index]}!";
-                    case LogicState.True:
-                        return inputVariables[index];
-                    default:
-                        return string.Empty;
+                    return $"{v}!";
                 }
-            }).Where(s => 
-                s != string.Empty
-            ));
+                else
+                {
+                    switch (Data[t])
+                    {
+                        case LogicState.False:
+                            return $"{v}!";
+                        case LogicState.True:
+                            return v;
+                        default:
+                            return string.Empty;
+                    }
+                }
+            }));
         }
 
         internal static Loop CompareItems(Loop item1, Loop item2)

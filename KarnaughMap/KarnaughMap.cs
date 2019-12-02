@@ -163,7 +163,8 @@ namespace KarnaughMap
         #endregion
         #region Events
         /// <summary>Raised after the Quine McCluskey algorithm is finished solving the Karnaugh map.</summary>
-        public event KarnaughMapSolvedEventHandler KarnaughMapSolved;
+        public event EventHandler<KarnaughMapSolvedEventArgs> KarnaughMapSolved;
+        public event EventHandler<KarnaughLoopAddedEventArgs> KarnaughLoopAdded;
         #endregion
         #region Public methods
         /// <summary>Fill the Karnaugh map randomly.</summary>
@@ -182,55 +183,83 @@ namespace KarnaughMap
             {
                 if (mode == Enums.eEditMode.Solve)
                 {
-                    // Check if there were selected cells
+                    SuspendLayout();
+                    
+                    // Check if there are selected cells
                     if (!selectedCells.Any()) throw new Exception("Please select some cells to join.");
 
-                    // Check if cells have the same value
-                    if (selectedCells.Intersect(ones).Count() != selectedCells.Count) throw new Exception("Selected minterms must have the same value.");
-                    if (selectedCells.Intersect(zeros).Count() != selectedCells.Count) throw new Exception("Selected minterms must have the same value.");
-                 
-                    // Check if at least one cell has a value
-                    if (ones.Intersect(zeros).Count() == selectedCells.Count) throw new Exception("Selected minterms cannot all be don't cares.");
+                    var selected_ones = ones.Except(zeros).Intersect(selectedCells);
+                    var selected_zeros = zeros.Except(ones).Intersect(selectedCells);
+                    var selected_dontcares = zeros.Intersect(ones).Intersect(selectedCells);
 
-                    var result = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(selectedCells, new List<int>()).ToList();
+                    // Find out the value of the loop
+                    bool value;
+                    if (selected_ones.Any())
+                    {
+                        if (selected_zeros.Any()) throw new Exception("Selected minterms must have the same value.");
+                        else value = true;
+                    }
+                    else
+                    {
+                        if (selected_zeros.Any()) value = false;
+                        else throw new Exception("Selected minterms cannot all be don't cares.");
+                    }
+
+                    var result = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(value ? selected_ones : selected_zeros, selected_dontcares).ToList();
 
                     // Check if selection resolves to one loop.
                     if (result.Count != 1) throw new Exception("Selected minterms cannot be simplified.");
 
-                    // Find out the value of the loop
-                    var value = ones.Intersect(selectedCells).Any();
+                    if (value) loops_ones.Add(result.First());
+                    else loops_zeros.Add(result.First());
 
-                    //if (value) loops_ones.Add(new QuineMcCluskey.RequiredLoop(result.First()));
-                    //else loops_zeros.Add(new QuineMcCluskey.RequiredLoop(result.First()));
+                    selectedCells.Clear();
+
+                    if (KarnaughLoopAdded != null)
+                        KarnaughLoopAdded(this, new KarnaughLoopAddedEventArgs(result.First(), value));
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            finally
+            {
+                ResumeLayout(true);
+                Invalidate();
+            }
         }
         /// <summary>Solve the Karnaugh map using the Quine McCluskey algorithm.</summary>
         public async Task SolveAutomatically()
         {
-            if (mode == Enums.eEditMode.Solve)
+            try
             {
-                SuspendLayout();
+                if (mode == Enums.eEditMode.Solve)
+                {
+                    SuspendLayout();
 
-                var dontcares = ones.Intersect(zeros);
-                var loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
-                var loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
+                    var dontcares = ones.Intersect(zeros);
+                    var loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
+                    var loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
 
-                this.loops_ones.Clear();
-                this.loops_ones.AddRange(loops_ones);
+                    this.loops_ones.Clear();
+                    this.loops_ones.AddRange(loops_ones);
 
-                this.loops_zeros.Clear();
-                this.loops_zeros.AddRange(loops_zeros);
+                    this.loops_zeros.Clear();
+                    this.loops_zeros.AddRange(loops_zeros);
 
-                ResumeLayout();
+                    if (KarnaughMapSolved != null)
+                        KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                ResumeLayout(true);
                 Invalidate();
-
-                if (KarnaughMapSolved != null)
-                    KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
             }
         }
         #endregion
@@ -298,7 +327,8 @@ namespace KarnaughMap
             set
             {
                 selected_loop = value;
-                selectedCells = value.MinTerms.ToList();
+                if (selected_loop == null) selectedCells = new List<int>();
+                else selectedCells = value.MinTerms.ToList();
                 Invalidate();
             }
         }

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KarnaughMap.Test", "Karnaug
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KarnaughMap", "KarnaughMap\KarnaughMap.csproj", "{5219FED0-CA20-4786-BAFC-52B66FFA87A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeMorgan", "DeMorgan\DeMorgan.csproj", "{F31DEA9C-5796-47AA-B2F5-E9C293AEA20D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5219FED0-CA20-4786-BAFC-52B66FFA87A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F31DEA9C-5796-47AA-B2F5-E9C293AEA20D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31DEA9C-5796-47AA-B2F5-E9C293AEA20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31DEA9C-5796-47AA-B2F5-E9C293AEA20D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31DEA9C-5796-47AA-B2F5-E9C293AEA20D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
