@@ -1,6 +1,6 @@
-﻿using QuineMcCluskey.Enums;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
+using QuineMcCluskey.Enums;
 
 namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
 {
@@ -31,29 +31,10 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
 
         public string ToString(string[] inputVariables)
         {
-            //return string.Join(" ", Data.Select((d, index) =>
-            //{
-            //    switch (d)
-            //    {
-            //        case LogicState.False:
-            //            return $"{inputVariables[index]}!";
-            //        case LogicState.True:
-            //            return inputVariables[index];
-            //        default:
-            //            return string.Empty;
-            //    }
-            //}).Where(s =>
-            //    s != string.Empty
-            //));
-
             return string.Join(" ", inputVariables.Select((v, index) =>
             {
-                var t = Data.Length - index - 1;
-                if (t < 0)
-                {
-                    return $"{v}!";
-                }
-                else
+                int t = index - (inputVariables.Length - Data.Length);
+                if (t >= 0)
                 {
                     switch (Data[t])
                     {
@@ -65,7 +46,11 @@ namespace QuineMcCluskey.Data.QuineMcCluskey.Table1
                             return string.Empty;
                     }
                 }
-            }));
+                else
+                {
+                    return $"{v}!";
+                }
+            }).Where(s => !string.IsNullOrEmpty(s)));
         }
 
         internal static Loop CompareItems(Loop item1, Loop item2)
