@@ -2,6 +2,7 @@
 The Quine McCluskey algorithm in c#
 ## NuGet package
 https://www.nuget.org/packages/QuineMcCluskey/
+https://www.nuget.org/packages/KarnaughMap/
 ## Installation
 ### NuGet package manager
 Open the NuGet package manager and install the **QuineMcCluskey** package in the project
