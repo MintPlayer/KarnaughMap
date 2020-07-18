@@ -7,12 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuineMcCluskey", "QuineMcCl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QuineMcCluskey.Test", "QuineMcKluskey.Test\QuineMcCluskey.Test.csproj", "{6627712F-35F9-46AB-B4E0-BBD9047875CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KarnaughMap.Test", "KarnaughMap.Test\KarnaughMap.Test.csproj", "{BD86D358-3346-4C7D-8CF6-87E060B71D34}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KarnaughMap", "KarnaughMap\KarnaughMap.csproj", "{5219FED0-CA20-4786-BAFC-52B66FFA87A6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeMorgan", "DeMorgan\DeMorgan.csproj", "{F31DEA9C-5796-47AA-B2F5-E9C293AEA20D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
