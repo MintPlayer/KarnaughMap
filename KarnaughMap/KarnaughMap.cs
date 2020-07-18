@@ -177,7 +177,7 @@ namespace KarnaughMap
                 Invalidate();
             }
         }
-        public async Task SolveSelection()
+        public Task SolveSelection()
         {
             try
             {
@@ -228,9 +228,11 @@ namespace KarnaughMap
                 ResumeLayout(true);
                 Invalidate();
             }
+
+            return Task.CompletedTask;
         }
         /// <summary>Solve the Karnaugh map using the Quine McCluskey algorithm.</summary>
-        public async Task SolveAutomatically()
+        public Task SolveAutomatically()
         {
             try
             {
@@ -261,6 +263,8 @@ namespace KarnaughMap
                 ResumeLayout(true);
                 Invalidate();
             }
+
+            return Task.CompletedTask;
         }
         #endregion
         #region Properties
