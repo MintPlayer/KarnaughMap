@@ -1,20 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>KarnaughMap</PackageId>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <UseWindowsForms>true</UseWindowsForms>
-    <Version>1.0.4</Version>
+    <Version>1.1.0</Version>
     <Description>This package contains a .NET Core Windows Forms control that renders a Karnaugh-map which is fully interactive.</Description>
-    <Authors>MintPlayer</Authors>
+    <Authors>Pieterjan De Clippel</Authors>
+    <Company>MintPlayer</Company>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/MintPlayer/QuineMcCluskey/tree/master/KarnaughMap</RepositoryUrl>
+    <RepositoryUrl>https://github.com/MintPlayer/KarnaughMap</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>Karnaugh-map, Quine McCluskey</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MintPlayer.ObservableCollection" Version="1.0.0" />
-    <PackageReference Include="QuineMcCluskey" Version="1.0.7" />
+    <PackageReference Include="MintPlayer.ObservableCollection" Version="1.2.0" />
+    <PackageReference Include="QuineMcCluskey" Version="1.0.8" />
   </ItemGroup>
 
 </Project>
