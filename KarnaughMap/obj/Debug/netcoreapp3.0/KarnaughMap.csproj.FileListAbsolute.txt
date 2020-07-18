@@ -1,0 +1,9 @@
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\bin\Debug\netcoreapp3.0\KarnaughMap.deps.json
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\bin\Debug\netcoreapp3.0\KarnaughMap.dll
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\bin\Debug\netcoreapp3.0\KarnaughMap.pdb
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\obj\Debug\netcoreapp3.0\KarnaughMap.csprojAssemblyReference.cache
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\obj\Debug\netcoreapp3.0\KarnaughMap.AssemblyInfoInputs.cache
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\obj\Debug\netcoreapp3.0\KarnaughMap.AssemblyInfo.cs
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\obj\Debug\netcoreapp3.0\KarnaughMap.csproj.CoreCompileInputs.cache
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\obj\Debug\netcoreapp3.0\KarnaughMap.dll
+C:\Users\piete\source\repos\KarnaughMap\KarnaughMap\obj\Debug\netcoreapp3.0\KarnaughMap.pdb
