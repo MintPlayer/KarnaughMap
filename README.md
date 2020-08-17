@@ -1,4 +1,5 @@
 # QuineMcCluskey
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b119ef33dd60435eb5fb9c3451d4c3f1)](https://app.codacy.com/gh/MintPlayer/QuineMcCluskey?utm_source=github.com&utm_medium=referral&utm_content=MintPlayer/QuineMcCluskey&utm_campaign=Badge_Grade_Dashboard)
 [![NuGet Version](https://img.shields.io/nuget/v/QuineMcCluskey.svg?style=flat)](https://www.nuget.org/packages/QuineMcCluskey)
 [![NuGet](https://img.shields.io/nuget/dt/QuineMcCluskey.svg?style=flat)](https://www.nuget.org/packages/QuineMcCluskey)
 [![Build Status](https://travis-ci.org/MintPlayer/QuineMcCluskey.svg?branch=master)](https://travis-ci.org/MintPlayer/QuineMcCluskey)
