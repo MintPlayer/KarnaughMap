@@ -2,6 +2,7 @@
 [![NuGet Version](https://img.shields.io/nuget/v/QuineMcCluskey.svg?style=flat)](https://www.nuget.org/packages/QuineMcCluskey)
 [![NuGet](https://img.shields.io/nuget/dt/QuineMcCluskey.svg?style=flat)](https://www.nuget.org/packages/QuineMcCluskey)
 [![Build Status](https://travis-ci.org/MintPlayer/QuineMcCluskey.svg?branch=master)](https://travis-ci.org/MintPlayer/QuineMcCluskey)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
 The Quine McCluskey algorithm in c#
 ## NuGet package
