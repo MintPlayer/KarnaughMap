@@ -6,8 +6,6 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/49681d22d4af4272974ed403a806e1e8)](https://www.codacy.com/gh/MintPlayer/QuineMcCluskey?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MintPlayer/QuineMcCluskey&amp;utm_campaign=Badge_Grade)
 
 The Quine McCluskey algorithm in c#
-## NuGet package
-https://www.nuget.org/packages/QuineMcCluskey/
 ## Installation
 ### NuGet package manager
 Open the NuGet package manager and install the **QuineMcCluskey** package in the project
