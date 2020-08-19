@@ -22,9 +22,7 @@ namespace KarnaughMap
             InputVariables = new MintPlayer.ObservableCollection.ObservableCollection<string>();
             InputVariables.CollectionChanged += InputVariables_CollectionChanged;
             loops_ones = new MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop>();
-            loops_ones.CollectionChanged += Loops_ones_CollectionChanged;
             loops_zeros = new MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop>();
-            loops_zeros.CollectionChanged += Loops_zeros_CollectionChanged;
 
             EventHandler invalidateDelegate = (sender, e) => Invalidate();
             GotFocus += invalidateDelegate;
@@ -180,8 +178,6 @@ namespace KarnaughMap
                         }
 
                         break;
-                    default:
-                        break;
                 }
             }
         }
@@ -199,7 +195,7 @@ namespace KarnaughMap
                         list.Add(num);
                     }
                 }
-            });
+            }).ConfigureAwait(false);
             return list;
         }
         #endregion
@@ -214,10 +210,8 @@ namespace KarnaughMap
         {
             if (mode == Enums.eEditMode.Edit)
             {
-                ones = await CalculateRandomNumbers(1 << InputVariables.Count)
-                    // Continue execution in the subthread
-                    .ConfigureAwait(false);
-                zeros = await CalculateRandomNumbers(1 << InputVariables.Count);
+                ones = await CalculateRandomNumbers(1 << InputVariables.Count).ConfigureAwait(false);
+                zeros = await CalculateRandomNumbers(1 << InputVariables.Count).ConfigureAwait(false);
                 Invalidate();
             }
         }
@@ -367,10 +361,7 @@ namespace KarnaughMap
             set
             {
                 var args = new ModeChangingEventArgs(mode, value);
-                if (ModeChanging != null)
-                {
-                    ModeChanging(this, args);
-                }
+                ModeChanging?.Invoke(this, args);
 
                 if (!args.Cancel)
                 {

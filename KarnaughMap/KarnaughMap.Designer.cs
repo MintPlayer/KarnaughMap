@@ -1,6 +1,6 @@
 ﻿namespace KarnaughMap
 {
-    partial class KarnaughMap
+    public partial class KarnaughMap
     {
         /// <summary> 
         /// Required designer variable.

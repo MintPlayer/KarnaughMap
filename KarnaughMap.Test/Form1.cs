@@ -82,7 +82,7 @@ namespace KarnaughMap.Test
             }
         }
 
-        private void KarnaughMap1_ModeChanging(object sender, EventArgs.ModeChangingEventArgs e)
+        private void KarnaughMap1_ModeChanging(object sender, Events.EventArgs.ModeChangingEventArgs e)
         {
             if (karnaughMap1.HasLoops)
             {
