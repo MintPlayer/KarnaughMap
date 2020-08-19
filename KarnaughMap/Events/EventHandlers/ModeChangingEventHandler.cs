@@ -1,6 +1,6 @@
-﻿using KarnaughMap.EventArgs;
+﻿using KarnaughMap.Events.EventArgs;
 
-namespace KarnaughMap.EventHandlers
+namespace KarnaughMap.Events.EventHandlers
 {
     public delegate void ModeChangingEventHandler(object sender, ModeChangingEventArgs e);
 }

@@ -1,6 +1,6 @@
 ﻿using KarnaughMap.Enums;
 
-namespace KarnaughMap.EventArgs
+namespace KarnaughMap.Events.EventArgs
 {
     public class ModeChangingEventArgs : System.EventArgs
     {

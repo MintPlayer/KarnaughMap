@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using KarnaughMap.EventArgs;
 using KarnaughMap.EventHandlers;
+using KarnaughMap.Exceptions;
+using KarnaughMap.Events.EventArgs;
+using KarnaughMap.Events.EventHandlers;
 
 namespace KarnaughMap
 {
@@ -109,8 +112,14 @@ namespace KarnaughMap
             }
             else
             {
-                if (selectedCells.Contains(minterm)) selectedCells.RemoveAll(m => m == minterm);
-                else selectedCells.Add(minterm);
+                if (selectedCells.Contains(minterm))
+                {
+                    selectedCells.RemoveAll(m => m == minterm);
+                }
+                else
+                {
+                    selectedCells.Add(minterm);
+                }
             }
         }
         private void SetValue(int minterm, Enums.eCellValue value)
@@ -121,27 +130,51 @@ namespace KarnaughMap
                 {
                     case Enums.eCellValue.Zero:
                         if (!zeros.Contains(minterm))
+                        {
                             zeros.Add(minterm);
+                        }
+
                         if (ones.Contains(minterm))
+                        {
                             ones.Remove(minterm);
+                        }
+
                         break;
                     case Enums.eCellValue.One:
                         if (zeros.Contains(minterm))
+                        {
                             zeros.Remove(minterm);
+                        }
+
                         if (!ones.Contains(minterm))
+                        {
                             ones.Add(minterm);
+                        }
+
                         break;
                     case Enums.eCellValue.DontCare:
                         if (!zeros.Contains(minterm))
+                        {
                             zeros.Add(minterm);
+                        }
+
                         if (!ones.Contains(minterm))
+                        {
                             ones.Add(minterm);
+                        }
+
                         break;
                     case Enums.eCellValue.Undefined:
                         if (zeros.Contains(minterm))
+                        {
                             zeros.Remove(minterm);
+                        }
+
                         if (ones.Contains(minterm))
+                        {
                             ones.Remove(minterm);
+                        }
+
                         break;
                 }
             }
@@ -155,7 +188,10 @@ namespace KarnaughMap
                 for (int i = 0; i < max; i++)
                 {
                     var num = random.Next(max);
-                    if (!list.Contains(num)) list.Add(num);
+                    if (!list.Contains(num))
+                    {
+                        list.Add(num);
+                    }
                 }
             });
             return list;
@@ -172,7 +208,9 @@ namespace KarnaughMap
         {
             if (mode == Enums.eEditMode.Edit)
             {
-                ones = await CalculateRandomNumbers(1 << InputVariables.Count);
+                ones = await CalculateRandomNumbers(1 << InputVariables.Count)
+                    // Continue execution in the subthread
+                    .ConfigureAwait(false);
                 zeros = await CalculateRandomNumbers(1 << InputVariables.Count);
                 Invalidate();
             }
@@ -186,7 +224,10 @@ namespace KarnaughMap
                     SuspendLayout();
                     
                     // Check if there are selected cells
-                    if (!selectedCells.Any()) throw new Exception("Please select some cells to join.");
+                    if (!selectedCells.Any())
+                    {
+                        throw new Exception("Please select some cells to join.");
+                    }
 
                     var selected_ones = ones.Except(zeros).Intersect(selectedCells);
                     var selected_zeros = zeros.Except(ones).Intersect(selectedCells);
@@ -196,27 +237,50 @@ namespace KarnaughMap
                     bool value;
                     if (selected_ones.Any())
                     {
-                        if (selected_zeros.Any()) throw new Exception("Selected minterms must have the same value.");
-                        else value = true;
+                        if (selected_zeros.Any())
+                        {
+                            throw new MinificationException("Selected minterms must have the same value.");
+                        }
+                        else
+                        {
+                            value = true;
+                        }
                     }
                     else
                     {
-                        if (selected_zeros.Any()) value = false;
-                        else throw new Exception("Selected minterms cannot all be don't cares.");
+                        if (selected_zeros.Any())
+                        {
+                            value = false;
+                        }
+                        else
+                        {
+                            throw new MinificationException("Selected minterms cannot all be don't cares.");
+                        }
                     }
 
                     var result = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(value ? selected_ones : selected_zeros, selected_dontcares).ToList();
 
                     // Check if selection resolves to one loop.
-                    if (result.Count != 1) throw new Exception("Selected minterms cannot be simplified.");
+                    if (result.Count != 1)
+                    {
+                        throw new MinificationException("Selected minterms cannot be simplified.");
+                    }
 
-                    if (value) loops_ones.Add(result.First());
-                    else loops_zeros.Add(result.First());
+                    if (value)
+                    {
+                        loops_ones.Add(result.First());
+                    }
+                    else
+                    {
+                        loops_zeros.Add(result.First());
+                    }
 
                     selectedCells.Clear();
 
                     if (KarnaughLoopAdded != null)
+                    {
                         KarnaughLoopAdded(this, new KarnaughLoopAddedEventArgs(result.First(), value));
+                    }
                 }
             }
             catch (Exception ex)
@@ -251,7 +315,9 @@ namespace KarnaughMap
                     this.loops_zeros.AddRange(loops_zeros);
 
                     if (KarnaughMapSolved != null)
+                    {
                         KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
+                    }
                 }
             }
             catch (Exception ex)
@@ -291,11 +357,14 @@ namespace KarnaughMap
         /// <summary>Defines whether you want to edit/solve the Karnaugh map.</summary>
         public Enums.eEditMode Mode
         {
-            get { return mode; }
+            get => mode;
             set
             {
                 var args = new ModeChangingEventArgs(mode, value);
-                if (ModeChanging != null) ModeChanging(this, args);
+                if (ModeChanging != null)
+                {
+                    ModeChanging(this, args);
+                }
 
                 if (!args.Cancel)
                 {
@@ -307,10 +376,7 @@ namespace KarnaughMap
                         loops_zeros.Clear();
                         selectedCells.Clear();
                     }
-                    else
-                    {
 
-                    }
                     Invalidate();
                 }
             }
@@ -327,12 +393,11 @@ namespace KarnaughMap
         private QuineMcCluskey.RequiredLoop selected_loop;
         public QuineMcCluskey.RequiredLoop SelectedLoop
         {
-            get { return selected_loop; }
+            get => selected_loop;
             set
             {
                 selected_loop = value;
-                if (selected_loop == null) selectedCells = new List<int>();
-                else selectedCells = value.MinTerms.ToList();
+                selectedCells = selected_loop == null ? new List<int>() : value.MinTerms.ToList();
                 Invalidate();
             }
         }
@@ -366,16 +431,28 @@ namespace KarnaughMap
             switch (e.KeyCode)
             {
                 case Keys.Left:
-                    if (--focusedCell.X < 0) focusedCell.X = columnCount - 1;
+                    if (--focusedCell.X < 0)
+                    {
+                        focusedCell.X = columnCount - 1;
+                    }
                     break;
                 case Keys.Right:
-                    if (++focusedCell.X >= columnCount) focusedCell.X = 0;
+                    if (++focusedCell.X >= columnCount)
+                    {
+                        focusedCell.X = 0;
+                    }
                     break;
                 case Keys.Up:
-                    if (--focusedCell.Y < 0) focusedCell.Y = rowCount - 1;
+                    if (--focusedCell.Y < 0)
+                    {
+                        focusedCell.Y = rowCount - 1;
+                    }
                     break;
                 case Keys.Down:
-                    if (++focusedCell.Y >= rowCount) focusedCell.Y = 0;
+                    if (++focusedCell.Y >= rowCount)
+                    {
+                        focusedCell.Y = 0;
+                    }
                     break;
                 case Keys.Space:
                     ToggleNumber(GridPositionToMinterm(focusedCell));
@@ -425,9 +502,13 @@ namespace KarnaughMap
 
             // Draw the grid
             for (int i = 0; i <= columnCount; i++)
+            {
                 e.Graphics.DrawLine(System.Drawing.Pens.Black, gridSize * (i + 1), gridSize, gridSize * (i + 1), gridSize * (rowCount + 1));
+            }
             for (int j = 0; j <= rowCount; j++)
+            {
                 e.Graphics.DrawLine(System.Drawing.Pens.Black, gridSize, gridSize * (j + 1), gridSize * (columnCount + 1), gridSize * (j + 1));
+            }
 
             // Draw the diagonal line
             e.Graphics.DrawLine(System.Drawing.Pens.Black, 0, 0, gridSize, gridSize);
@@ -495,17 +576,11 @@ namespace KarnaughMap
                     string text;
                     if (ones.Contains(index))
                     {
-                        if (zeros.Contains(index))
-                            text = "X";
-                        else
-                            text = "1";
+                        text = zeros.Contains(index) ? "X" : "1";
                     }
                     else
                     {
-                        if (zeros.Contains(index))
-                            text = "0";
-                        else
-                            text = "-";
+                        text = zeros.Contains(index) ? "0" : "-";
                     }
 
                     e.Graphics.DrawString(text, Font, Brushes.Black, new RectangleF((i + 1) * gridSize, (j + 1) * gridSize, gridSize, gridSize), sf);

@@ -1,6 +1,6 @@
 ﻿using QuineMcCluskey;
 
-namespace KarnaughMap.EventArgs
+namespace KarnaughMap.Events.EventArgs
 {
     public class KarnaughLoopAddedEventArgs : System.EventArgs
     {

@@ -1,7 +1,7 @@
 ﻿using QuineMcCluskey;
 using System.Collections.Generic;
 
-namespace KarnaughMap.EventArgs
+namespace KarnaughMap.Events.EventArgs
 {
     public class KarnaughMapSolvedEventArgs : System.EventArgs
     {

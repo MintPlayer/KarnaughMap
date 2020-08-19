@@ -10,11 +10,15 @@ namespace KarnaughMap
         {
             var userControlSerializer = manager.GetSerializer(typeof(KarnaughMap).BaseType, typeof(CodeDomSerializer)) as CodeDomSerializer;
             if (userControlSerializer == null)
+            {
                 System.Windows.Forms.MessageBox.Show("userControlSerializer == null");
+            }
 
             var statements = userControlSerializer.Serialize(manager, value) as CodeStatementCollection;
             if (statements == null)
+            {
                 System.Windows.Forms.MessageBox.Show("statements == null");
+            }
 
             var karnaughMap = value as KarnaughMap;
             if (karnaughMap == null)
