@@ -5,11 +5,9 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
-using KarnaughMap.EventArgs;
-using KarnaughMap.EventHandlers;
-using KarnaughMap.Exceptions;
 using KarnaughMap.Events.EventArgs;
 using KarnaughMap.Events.EventHandlers;
+using KarnaughMap.Exceptions;
 
 namespace KarnaughMap
 {
@@ -55,9 +53,9 @@ namespace KarnaughMap
         /// <summary>Holds the minterms that are selected</summary>
         private List<int> selectedCells = new List<int>();
         /// <summary>Holds the required loops for "high".</summary>
-        private MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop> loops_ones;
+        private readonly MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop> loops_ones;
         /// <summary>Holds the required loops for "low".</summary>
-        private MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop> loops_zeros;
+        private readonly MintPlayer.ObservableCollection.ObservableCollection<QuineMcCluskey.RequiredLoop> loops_zeros;
         #endregion
         #region Private methods
         /// <summary>Gets the minterm value for a specified grid position</summary>
@@ -106,8 +104,14 @@ namespace KarnaughMap
                 }
                 else
                 {
-                    if (ones.Contains(minterm)) zeros.Add(minterm);
-                    else zeros.Add(minterm);
+                    if (ones.Contains(minterm))
+                    {
+                        zeros.Add(minterm);
+                    }
+                    else
+                    {
+                        zeros.Add(minterm);
+                    }
                 }
             }
             else
@@ -176,6 +180,8 @@ namespace KarnaughMap
                         }
 
                         break;
+                    default:
+                        break;
                 }
             }
         }
@@ -226,7 +232,7 @@ namespace KarnaughMap
                     // Check if there are selected cells
                     if (!selectedCells.Any())
                     {
-                        throw new Exception("Please select some cells to join.");
+                        throw new MinificationException("Please select some cells to join.");
                     }
 
                     var selected_ones = ones.Except(zeros).Intersect(selectedCells);
@@ -305,18 +311,18 @@ namespace KarnaughMap
                     SuspendLayout();
 
                     var dontcares = ones.Intersect(zeros);
-                    var loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
-                    var loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
+                    var solved_loops_ones = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(ones, dontcares);
+                    var solved_loops_zeros = QuineMcCluskey.QuineMcCluskeySolver.QMC_Solve(zeros, dontcares);
 
-                    this.loops_ones.Clear();
-                    this.loops_ones.AddRange(loops_ones);
+                    loops_ones.Clear();
+                    loops_ones.AddRange(solved_loops_ones);
 
-                    this.loops_zeros.Clear();
-                    this.loops_zeros.AddRange(loops_zeros);
+                    loops_zeros.Clear();
+                    loops_zeros.AddRange(solved_loops_zeros);
 
                     if (KarnaughMapSolved != null)
                     {
-                        KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(loops_ones.ToList(), loops_zeros.ToList()));
+                        KarnaughMapSolved(this, new KarnaughMapSolvedEventArgs(solved_loops_ones.ToList(), solved_loops_zeros.ToList()));
                     }
                 }
             }
@@ -417,14 +423,6 @@ namespace KarnaughMap
             columnCount = 1 << varsXcount;
 
             Invalidate();
-        }
-        private void Loops_ones_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            
-        }
-        private void Loops_zeros_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-
         }
         private void KarnaughMap_KeyDown(object sender, KeyEventArgs e)
         {
@@ -599,8 +597,14 @@ namespace KarnaughMap
 
         private void KarnaughMap_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.X < gridSize + Font.Height) return;
-            if (e.Y < gridSize + Font.Height) return;
+            if (e.X < gridSize + Font.Height)
+            {
+                return;
+            }
+            if (e.Y < gridSize + Font.Height)
+            {
+                return;
+            }
 
             var x = (e.X - gridSize - Font.Height) / gridSize;
             var y = (e.Y - gridSize - Font.Height) / gridSize;

@@ -35,10 +35,17 @@ namespace KarnaughMap.Test
         private List<QuineMcCluskey.RequiredLoop> loopsOnes;
         private List<QuineMcCluskey.RequiredLoop> loopsZeros;
 
-        private void KarnaughMap1_KarnaughLoopAdded(object sender, EventArgs.KarnaughLoopAddedEventArgs e)
+        private void KarnaughMap1_KarnaughLoopAdded(object sender, Events.EventArgs.KarnaughLoopAddedEventArgs e)
         {
-            if (loopsOnes == null) loopsOnes = new List<QuineMcCluskey.RequiredLoop>();
-            if (loopsZeros == null) loopsZeros = new List<QuineMcCluskey.RequiredLoop>();
+            if (loopsOnes == null)
+            {
+                loopsOnes = new List<QuineMcCluskey.RequiredLoop>();
+            }
+
+            if (loopsZeros == null)
+            {
+                loopsZeros = new List<QuineMcCluskey.RequiredLoop>();
+            }
 
             if (e.Value)
             {
@@ -51,7 +58,7 @@ namespace KarnaughMap.Test
                 lstLoopZeros.Items.Add(e.Loop.ToString(karnaughMap1.InputVariables.ToArray()));
             }
         }
-        private void KarnaughMap1_KarnaughMapSolved(object sender, EventArgs.KarnaughMapSolvedEventArgs e)
+        private void KarnaughMap1_KarnaughMapSolved(object sender, Events.EventArgs.KarnaughMapSolvedEventArgs e)
         {
             loopsOnes = e.LoopsOnes;
             loopsZeros = e.LoopsZeros;
@@ -62,7 +69,7 @@ namespace KarnaughMap.Test
             lstLoopZeros.Items.AddRange(e.LoopsZeros.Select(l => l.ToString(karnaughMap1.InputVariables.ToArray())).ToArray());
         }
 
-        private bool ignoreSelectedModeChanging = false;
+        private bool ignoreSelectedModeChanging;
         private void cmbMode_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (!ignoreSelectedModeChanging)
