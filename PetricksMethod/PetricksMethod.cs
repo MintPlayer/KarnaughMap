@@ -11,7 +11,7 @@ namespace PetricksMethod
         {
         }
 
-        public Task<Implicant> FindEssentialImplicants(IEnumerable<int> minterms, IEnumerable<Implicant> implicants)
+        public Task<IEnumerable<Implicant>> FindEssentialImplicants(IEnumerable<int> minterms, IEnumerable<Implicant> implicants)
         {
             throw new System.NotImplementedException();
         }

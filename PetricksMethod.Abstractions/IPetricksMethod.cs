@@ -7,6 +7,6 @@ namespace PetricksMethod.Abstractions
 {
     public interface IPetricksMethod
     {
-        Task<Implicant> FindEssentialImplicants(IEnumerable<int> minterms, IEnumerable<Implicant> implicants);
+        Task<IEnumerable<Implicant>> FindEssentialImplicants(IEnumerable<int> minterms, IEnumerable<Implicant> implicants);
     }
 }

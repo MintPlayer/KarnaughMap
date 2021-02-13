@@ -18,9 +18,11 @@ namespace Karnaugh
             this.petricksMethod = petricksMethod;
         }
 
-        public Task<IEnumerable<Implicant>> Resolve(IEnumerable<int> minterms, IEnumerable<int> dontcares)
+        public async Task<IEnumerable<Implicant>> Resolve(IEnumerable<int> minterms, IEnumerable<int> dontcares)
         {
-            throw new System.NotImplementedException();
+            var primeImplicants = await quineMcCluskey.FindImplicants(minterms, dontcares);
+            var essentialPrimeImplicants = await petricksMethod.FindEssentialImplicants(minterms, primeImplicants);
+            return essentialPrimeImplicants;
         }
     }
 }
