@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Karnaugh.Abstractions\Karnaugh.Abstractions.csproj" />
+    <ProjectReference Include="..\PetricksMethod.Abstractions\PetricksMethod.Abstractions.csproj" />
     <ProjectReference Include="..\QuineMcCluskey.Abstractions\QuineMcCluskey.Abstractions.csproj" />
   </ItemGroup>
 
