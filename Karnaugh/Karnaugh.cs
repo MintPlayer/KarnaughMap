@@ -21,8 +21,10 @@ namespace Karnaugh
         public async Task<IEnumerable<Implicant>> Resolve(IEnumerable<int> minterms, IEnumerable<int> dontcares)
         {
             var primeImplicants = await quineMcCluskey.FindImplicants(minterms, dontcares);
-            var essentialPrimeImplicants = await petricksMethod.FindEssentialImplicants(minterms, primeImplicants);
-            return essentialPrimeImplicants;
+            return primeImplicants.Implicants;
+
+            //var essentialPrimeImplicants = await petricksMethod.FindEssentialImplicants(minterms, primeImplicants);
+            //return essentialPrimeImplicants;
         }
     }
 }

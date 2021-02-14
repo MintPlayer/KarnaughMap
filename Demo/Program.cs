@@ -10,7 +10,7 @@ namespace Demo
 {
     class Program
     {
-        static async void Main(string[] args)
+        static void Main(string[] args)
         {
             var services = new ServiceCollection()
                 .AddQuineMcCluskey()
@@ -22,7 +22,7 @@ namespace Demo
             var dontcares = new List<int>();
             var karnaugh = services.GetService<IKarnaugh>();
 
-            var implicants = await karnaugh.Resolve(minterms, dontcares);
+            var implicants = karnaugh.Resolve(minterms, dontcares).Result;
         }
     }
 }

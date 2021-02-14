@@ -11,7 +11,8 @@ namespace QuineMcCluskey.Extensions
         public static IServiceCollection AddQuineMcCluskey(this IServiceCollection services)
         {
             return services
-                .AddTransient<IQuineMcCluskey, QuineMcCluskey>();
+                .AddTransient<IQuineMcCluskey, QuineMcCluskey>()
+                .AddTransient<ILoopCombiner, LoopCombiner>();
         }
     }
 }

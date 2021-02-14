@@ -6,6 +6,6 @@ namespace QuineMcCluskey.Abstractions
 {
     public interface IQuineMcCluskey
     {
-        Task<IEnumerable<Implicant>> FindImplicants(IEnumerable<int> minterms, IEnumerable<int> dontcares);
+        Task<ImplicantsResult> FindImplicants(IEnumerable<int> minterms, IEnumerable<int> dontcares);
     }
 }
