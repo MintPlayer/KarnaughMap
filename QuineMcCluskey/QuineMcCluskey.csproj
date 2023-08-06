@@ -9,11 +9,11 @@
 		<Company>MintPlayer</Company>
 		<Description>.NET Implementation of the Quine-McCluskey algorithm</Description>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/MintPlayer/QuineMcCluskey/QuineMcCluskey</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/MintPlayer/QuineMcCluskey</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/MintPlayer/KarnaughMap/QuineMcCluskey</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/MintPlayer/KarnaughMap</RepositoryUrl>
 		<RepositoryType>Git</RepositoryType>
 		<PackageTags>Quine-McCluskey algorithm, logic simplification</PackageTags>
-		<Version>7.0.0</Version>
+		<Version>7.0.1</Version>
 	</PropertyGroup>
 
 </Project>
