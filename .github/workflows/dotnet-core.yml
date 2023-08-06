@@ -21,6 +21,8 @@ jobs:
         dotnet-version: 7.0.306
         # Authenticates packages to push to GPR
         source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+      env:
+        NUGET_AUTH_TOKEN: ${{ github.token }}
         
     - name: Install dependencies
       run: dotnet restore
